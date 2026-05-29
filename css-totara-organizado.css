@@ -496,10 +496,6 @@ a[href*="/message/edit.php"] {
 }
 
 
-.block_slickslider .elslide{
-  border-radius: 40px !important;
-}
-
 .block_slickslider .conttext .text {
   color: #fff;
 }
