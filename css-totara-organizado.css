@@ -5424,7 +5424,10 @@ div:has(> #region-main) > #block-region-side-post {
 
 /* Placeholder sin imagen */
 #page-totara-catalog-index .tw-catalogItemNarrow__image_ratio_img:not([style*="background-image"]) {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%) !important;
+  background-image: url('https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/default.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
 /* Badge tipo */
