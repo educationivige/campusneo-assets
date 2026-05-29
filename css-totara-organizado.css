@@ -1364,11 +1364,13 @@ div#region-main #inst281 .header.block-header h2::after {
 }
 
 .fecha-inicio::before {
-  font-family: "Font Awesome 6 Free";
-  font-weight: 400;
-  content: "\f073";
-  color: var(--color-primary-light);
-  font-size: 16px;
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url('https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/horas.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
   margin-right: 5px;
   vertical-align: middle;
 }
@@ -2096,11 +2098,13 @@ h2#instance-8378-header {
 }
 
 .tw-catalogItemNarrow__textarea_group .tw-catalogItemNarrow__textarea_group_item:first-child::before {
-  font-family: "Font Awesome 6 Free";
-  font-weight: 400;
-  content: "\f017";
-  color: var(--color-primary-light);
-  font-size: 15px;
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 19px;
+  background-image: url('https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/horas.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
   margin-right: 3px;
   vertical-align: middle;
 }
