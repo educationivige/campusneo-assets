@@ -1,5 +1,4 @@
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     /// Configuración visible y fácil de modificar
     const config = {
         // Rutas base donde se aplicarán las funciones
@@ -3372,4 +3371,3 @@ table.appendChild(tfoot);
         schedule();
     }
 })();
-</script>
