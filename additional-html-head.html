@@ -1,0 +1,96 @@
+<!-- ============================================================
+   FUENTES PERSONALIZADAS
+   VAGRoundedStd: servida desde el tema Actua (mismo dominio).
+   Neue Montreal y Canela son externas y se declaran aquí.
+   ============================================================ -->
+
+<!-- Preload: el navegador descarga la fuente antes de procesar el CSS -->
+<link rel="preload" href="https://ivirma.actuatxp.com/theme/actua/webfont.php?nomfont=VAGRoundedStd-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://ivirma.actuatxp.com/theme/actua/webfont.php?nomfont=VAGRoundedStd-Bold.woff" as="font" type="font/woff" crossorigin>
+
+<style id="imr-csss">
+
+@font-face {
+    font-family: 'VAGRoundedStd';
+    src: url('https://ivirma.actuatxp.com/theme/actua/webfont.php?nomfont=VAGRoundedStd-Bold.woff2') format('woff2'),
+         url('https://ivirma.actuatxp.com/theme/actua/webfont.php?nomfont=VAGRoundedStd-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('https://apps.ivieducationcloud.com/fonts/NeueMontreal-Medium.woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Canela';
+    src: url('https://apps.ivieducationcloud.com/fonts/Canela-Light.woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+</style>
+
+<!-- ============================================================
+   SCRIPTS EXTERNOS
+   ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script id="Cookiebot" src=https://consent.cookiebot.com/uc.js data-cbid="3161ce27-6979-4c00-961c-cb6c3cd0086a" type="text/javascript"></script>
+
+<!-- ============================================================
+   ESTILOS TENANT IMR
+   ============================================================ -->
+<style>
+#inst10236 td a img.course_icon {
+  background: var(--color-primary) !important;
+  padding: 14px;
+  max-width: 65px !important;
+  max-height: 65px !important;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+body.tenant-user-imr a,
+body.tenant-user-imr p,
+body.tenant-user-imr div,
+body.tenant-user-imr ul,
+body.tenant-user-imr form {
+    font-family: 'Neue Montreal';
+    font-weight: 400;
+}
+
+/* Login IMR */
+#page-login-index.tenant-user-imr .loginpanel h2 {
+    background-size: 150px !important;
+}
+
+#page-login-index.tenant-user-imr .signuppanel {
+    display: none !important;
+}
+
+#page-login-index.tenant-user-imr .loginpanel {
+    background-color: #342818 !important;
+    padding: 40px !important;
+    border-radius: var(--border-radius-large) !important;
+}
+
+#page-login-index.tenant-user-imr .loginbox.clearfix.twocolumns {
+    margin: auto !important;
+    padding-bottom: 0px !important;
+}
+
+@media screen and (min-width: 768px) {
+    .loginbox.twocolumns .loginpanel {
+        width: 100% !important;
+    }
+}
+
+.block_totara_report_table .footer {
+    display: none;
+}
+</style>
