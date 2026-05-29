@@ -1,81 +1,51 @@
 # CampusNEO Assets
 
-Repositorio centralizado de estilos y scripts personalizados para la plataforma **Totara** de CampusNEO.
+![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Totara](https://img.shields.io/badge/Totara-LMS-006975?style=for-the-badge)
+
+Repositorio centralizado de estilos y scripts personalizados para la plataforma de aprendizaje **CampusNEO**, construida sobre Totara LMS.
 
 ---
 
-## Archivos
+## Estructura
 
-| Archivo | Descripción |
-|---|---|
-| `css-totara-organizado.css` | CSS personalizado completo del campus |
-| `additional-html-head.html` | Fuentes, scripts externos y estilos de tenant — se pega en el campo *Additional HTML head* de Totara |
-| `additional-html-footer.js` | Scripts del footer — se referencia desde *Additional HTML footer* de Totara |
-
----
-
-## Integración en Totara
-
-### CSS — cargado desde GitHub
-
-**PRE** (cambios visibles en ~5-10 min):
-```html
-<link rel="stylesheet" href="https://raw.githubusercontent.com/educationivige/campusneo-assets/main/css-totara-organizado.css">
 ```
-
-**PRO** (CDN global, versión fija):
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/educationivige/campusneo-assets@v1.0/css-totara-organizado.css">
-```
-
-### HTML head y footer — pegado manualmente
-
-El contenido de `additional-html-head.html` y `additional-html-footer.js` se copia directamente en los campos correspondientes de Totara. No se cargan desde GitHub.
-
----
-
-## Flujo de trabajo
-
-### Cambios en PRE
-1. Editar el archivo en local
-2. `git commit` + `git push` a `main`
-3. PRE recoge los cambios automáticamente en ~5-10 minutos
-
-### Publicar en PRO
-1. Verificar que los cambios funcionan en PRE
-2. Crear un nuevo tag en GitHub (`v1.1`, `v1.2`...)
-3. Actualizar la URL en Totara PRO con la nueva versión
-
----
-
-## Barra de entorno PRE
-
-> La barra roja de identificación de PRE **nunca se sube a este repositorio**. Debe pegarse manualmente en el campo **CSS personalizado** de Totara PRE.
-
-```css
-body::before {
-  content: "⚠️ SITIO EN PRE ⚠️";
-  display: block;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  z-index: 99999;
-  background-color: #e75d5d;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  padding: 8px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-}
-body { padding-top: 38px !important; }
+campusneo-assets/
+├── css-totara-organizado.css     # Estilos globales del campus
+├── additional-html-head.html     # Fuentes, tipografías y scripts de cabecera
+└── additional-html-footer.js     # Scripts del footer
 ```
 
 ---
 
-## Caché por entorno
+## Tecnologías
 
-| URL | Caché | Uso |
+- **CSS3** — variables, custom properties, responsive design
+- **HTML5** — integración de fuentes web y recursos externos
+- **JavaScript** — scripts de comportamiento del footer
+- **jsDelivr** — CDN para distribución en producción
+- **GitHub** — control de versiones y fuente de verdad
+
+---
+
+## Flujo PRE → PRO
+
+El repositorio soporta dos entornos con estrategias de caché distintas:
+
+| Entorno | Fuente | Caché |
 |---|---|---|
-| `raw.githubusercontent.com/main/...` | ~5-10 min | PRE / desarrollo |
-| `cdn.jsdelivr.net/gh/...@vX.X/...` | Permanente | PRO / producción |
+| **PRE** | `raw.githubusercontent.com` | ~5-10 min |
+| **PRO** | jsDelivr CDN con tag de versión | Permanente |
+
+Los cambios se publican en PRE con cada `push` a `main`.
+Para PRO se crea un nuevo **release** (`v1.0`, `v1.1`...) y se actualiza la URL en la plataforma.
+
+---
+
+## Buenas prácticas
+
+- El CSS de producción **nunca incluye** elementos de depuración ni indicadores de entorno
+- Las versiones de producción se distribuyen mediante **tags inmutables**
+- El historial de git actúa como registro de auditoría de todos los cambios visuales
