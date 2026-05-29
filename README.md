@@ -30,20 +30,6 @@ campusneo-assets/
 
 ---
 
-## Flujo PRE → PRO
-
-El repositorio soporta dos entornos con estrategias de caché distintas:
-
-| Entorno | Fuente | Caché |
-|---|---|---|
-| **PRE** | `raw.githubusercontent.com` | ~5-10 min |
-| **PRO** | jsDelivr CDN con tag de versión | Permanente |
-
-Los cambios se publican en PRE con cada `push` a `main`.
-Para PRO se crea un nuevo **release** (`v1.0`, `v1.1`...) y se actualiza la URL en la plataforma.
-
----
-
 ## Buenas prácticas
 
 - El CSS de producción **nunca incluye** elementos de depuración ni indicadores de entorno
