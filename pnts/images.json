@@ -1,0 +1,18 @@
+{
+  "categorias": [
+    { "keywords": ["ohss", "ovarian"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/clinica.png" },
+    { "keywords": ["serology", "serolog", "consent"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/serologia.png" },
+    { "keywords": ["adenomios"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/clinica.png" },
+    { "keywords": ["vitrif", "desvitrif"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/vitrificacion.png" },
+    { "keywords": ["laborator", "lab", "nota técnica", "parada"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/laboratorio.png" },
+    { "keywords": ["visita", "infertil"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/infertilidad.png" },
+    { "keywords": ["biovigilancia", "biovigilance"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/biovigilancia.png" },
+    { "keywords": ["embrion", "embryo", "thaw"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/embrion.png" },
+    { "keywords": ["trazabilidad", "muestras", "biológic"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/trazabilidad.png" },
+    { "keywords": ["alerta", "seguridad", "geneseeker"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/seguridad.png" },
+    { "keywords": ["documentac", "gestión", "clínica"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/documentacion.png" },
+    { "keywords": ["genetic", "genétic"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/genetica.png" },
+    { "keywords": ["standard", "estándar", "sop", "pnt"], "imagen": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/laboratorio.png" }
+  ],
+  "default": "https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/default.png"
+}

@@ -3295,6 +3295,99 @@ table.appendChild(tfoot);
 })();
 
 /* ============================================================
+   CATÁLOGO — Imágenes automáticas para cursos PNT_
+   Para cada tarjeta cuyo título contenga "PNT" busca la primera
+   categoría de pnts/images.json cuyos keywords aparezcan en el
+   título (case-insensitive) y asigna su imagen. Si ninguna
+   categoría coincide se aplica la imagen "default" del JSON.
+   ============================================================ */
+(function () {
+    if (!window.location.pathname.includes('/catalog/')) return;
+
+    // ── Mapa de imágenes (sincronizado con pnts/images.json) ─────────────
+    const PNT_CONFIG = {
+        categorias: [
+            { keywords: ['ohss', 'ovarian'],                    imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/clinica.png' },
+            { keywords: ['serology', 'serolog', 'consent'],     imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/serologia.png' },
+            { keywords: ['adenomios'],                          imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/clinica.png' },
+            { keywords: ['vitrif', 'desvitrif'],                imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/vitrificacion.png' },
+            { keywords: ['laborator', 'lab', 'nota técnica', 'parada'], imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/laboratorio.png' },
+            { keywords: ['visita', 'infertil'],                 imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/infertilidad.png' },
+            { keywords: ['biovigilancia', 'biovigilance'],      imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/biovigilancia.png' },
+            { keywords: ['embrion', 'embryo', 'thaw'],          imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/embrion.png' },
+            { keywords: ['trazabilidad', 'muestras', 'biológic'], imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/trazabilidad.png' },
+            { keywords: ['alerta', 'seguridad', 'geneseeker'], imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/seguridad.png' },
+            { keywords: ['documentac', 'gestión', 'clínica'],  imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/documentacion.png' },
+            { keywords: ['genetic', 'genétic'],                 imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/genetica.png' },
+            { keywords: ['standard', 'estándar', 'sop', 'pnt'], imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/laboratorio.png' }
+        ],
+        default: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/default.png'
+    };
+
+    // ── Helpers ───────────────────────────────────────────────────────────
+
+    function isPntCard(card) {
+        const titleEl = card.querySelector('.tw-catalogItemNarrow__title');
+        if (!titleEl) return false;
+        return titleEl.textContent.toUpperCase().includes('PNT');
+    }
+
+    function resolveImage(card) {
+        const titleEl = card.querySelector('.tw-catalogItemNarrow__title');
+        if (!titleEl) return PNT_CONFIG.default;
+        const titleLower = titleEl.textContent.toLowerCase();
+
+        const match = PNT_CONFIG.categorias.find(cat =>
+            cat.keywords.some(kw => titleLower.includes(kw.toLowerCase()))
+        );
+        return match ? match.imagen : PNT_CONFIG.default;
+    }
+
+    function applyImage(card) {
+        if (!isPntCard(card)) return;
+
+        const imgEl = card.querySelector('.tw-catalogItemNarrow__image_ratio_img');
+        if (!imgEl) return;
+
+        // No sobreescribir si ya tiene imagen real de Totara (no la imagen default del CSS)
+        const currentBg = imgEl.style.backgroundImage || '';
+        if (currentBg && !currentBg.includes('default.png')) return;
+
+        const imageUrl = resolveImage(card);
+        imgEl.style.backgroundImage = `url('${imageUrl}')`;
+        imgEl.style.backgroundSize = 'cover';
+        imgEl.style.backgroundPosition = 'center';
+        imgEl.style.backgroundRepeat = 'no-repeat';
+    }
+
+    // ── Procesa todas las tarjetas visibles ───────────────────────────────
+
+    function processCards() {
+        document.querySelectorAll('[data-tw-grid-item]').forEach(applyImage);
+    }
+
+    // ── Observer para tarjetas cargadas dinámicamente ─────────────────────
+
+    function observeGrid() {
+        const grid = document.querySelector('section.tw-grid[role="list"]');
+        if (!grid) return;
+
+        const observer = new MutationObserver(processCards);
+        observer.observe(grid, { childList: true, subtree: false });
+    }
+
+    // ── Init con reintentos por carga asíncrona del catálogo ──────────────
+
+    function init() {
+        processCards();
+        observeGrid();
+    }
+
+    [200, 600, 1200, 2500].forEach(ms => setTimeout(init, ms));
+})();
+
+
+/* ============================================================
    CATÁLOGO — Filtros colapsables con apertura por defecto
    Los headers (h3) de los filtros no tienen toggle nativo en Totara.
    Este script añade el comportamiento: abiertos por defecto,
