@@ -78,7 +78,7 @@
     // ── Lógica principal por tarjeta ──────────────────────────────────────────
 
     function procesarCard(card) {
-        if (card.getAttribute('data-id-netex-processed') === 'true') return;
+        if (card.getAttribute('data-cat-img-done') === 'true') return;
 
         const title    = getTitle(card);
         const idNetex  = extractIdNetex(card);
@@ -94,10 +94,14 @@
             }
 
             if (imageUrl) {
-                imageEl.style.backgroundImage    = `url('${imageUrl}')`;
-                imageEl.style.backgroundSize     = 'cover';
-                imageEl.style.backgroundPosition = 'center';
-                imageEl.style.backgroundRepeat   = 'no-repeat';
+                const newBg = `url('${imageUrl}')`;
+                // Guardia anti-bucle: no tocar si ya pusimos esta misma imagen
+                if (imageEl.style.backgroundImage !== newBg) {
+                    imageEl.style.backgroundImage    = newBg;
+                    imageEl.style.backgroundSize     = 'cover';
+                    imageEl.style.backgroundPosition = 'center';
+                    imageEl.style.backgroundRepeat   = 'no-repeat';
+                }
             }
         }
 
@@ -126,8 +130,7 @@
             }
         }
 
-        // Marcar como procesado
-        card.setAttribute('data-id-netex-processed', 'true');
+        card.setAttribute('data-cat-img-done', 'true');
         if (idNetex) card.setAttribute('data-id-netex-value', idNetex);
     }
 
@@ -167,8 +170,8 @@
                 ) {
                     const card = m.target.closest('.tw-catalogItemNarrow');
                     if (card) {
-                        // Quitar el flag para que se re-aplique nuestra imagen
-                        card.removeAttribute('data-id-netex-processed');
+                        // Un script externo cambió el style: quitamos nuestro flag y reaplicamos
+                        card.removeAttribute('data-cat-img-done');
                         procesarCard(card);
                     }
                 }
