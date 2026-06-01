@@ -47,17 +47,17 @@
     }
 
     function isLfe(card) {
-        var needle = 'LEARNING FOR EXCELLENCE';
+        // Busca "LFE" en los campos del filtro_bloque renderizados en la tarjeta
+        // (.tw-catalogItemNarrow__textarea_group_item incluye campos visibles y ocultos)
+        var items = card.querySelectorAll('.tw-catalogItemNarrow__textarea_group_item');
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].textContent.trim().toUpperCase() === 'LFE') return true;
+        }
 
-        // Busca en el atributo title del elemento raíz
-        if ((card.getAttribute('title') || '').toUpperCase().includes(needle)) return true;
-
-        // Busca en todo el texto de la tarjeta (incluye campos ocultos)
-        if (card.textContent.toUpperCase().includes(needle)) return true;
-
-        // Busca en cualquier atributo del elemento raíz
-        for (var i = 0; i < card.attributes.length; i++) {
-            if (card.attributes[i].value.toUpperCase().includes(needle)) return true;
+        // Fallback: busca "LFE" como valor en cualquier atributo del elemento raíz
+        // (por si Totara lo expone en un data-*)
+        for (var j = 0; j < card.attributes.length; j++) {
+            if (card.attributes[j].value.toUpperCase().includes('LFE')) return true;
         }
 
         return false;
