@@ -5486,6 +5486,11 @@ div:has(> #region-main) > #block-region-side-post {
 }
 
 /* ── Botón "Carga más" ───────────────────────────────────────── */
+#page-totara-catalog-index .tw-catalogPagination {
+  display: flex !important;
+  justify-content: center !important;
+}
+
 #page-totara-catalog-index .tw-catalogPagination__btn {
   padding: 12px 40px !important;
   background: transparent !important;
