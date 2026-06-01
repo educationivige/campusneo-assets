@@ -3349,10 +3349,6 @@ table.appendChild(tfoot);
         const imgEl = card.querySelector('.tw-catalogItemNarrow__image_ratio_img');
         if (!imgEl) return;
 
-        // No sobreescribir si ya tiene imagen real de Totara (no la imagen default del CSS)
-        const currentBg = imgEl.style.backgroundImage || '';
-        if (currentBg && !currentBg.includes('default.png')) return;
-
         const imageUrl = resolveImage(card);
         imgEl.style.backgroundImage = `url('${imageUrl}')`;
         imgEl.style.backgroundSize = 'cover';
