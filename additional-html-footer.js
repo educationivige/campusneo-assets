@@ -3304,6 +3304,14 @@ table.appendChild(tfoot);
 (function () {
     if (!window.location.pathname.includes('/catalog/')) return;
 
+    // ── Badge LFE ─────────────────────────────────────────────────────────
+    const LFE_BADGE = {
+        url:    'https://ivirma.actuatxp.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/LFE-badge.png',
+        width:  '72px',   // ← cambia este valor para ajustar el tamaño
+        top:    '8px',
+        left:   '8px'
+    };
+
     // ── Mapa de imágenes (sincronizado con pnts/images.json) ─────────────
     const PNT_CONFIG = {
         categorias: [
@@ -3361,10 +3369,48 @@ table.appendChild(tfoot);
         imgEl.style.backgroundRepeat = 'no-repeat';
     }
 
+    // ── Badge LFE ─────────────────────────────────────────────────────────
+
+    function isLfeCard(card) {
+        const titleEl = card.querySelector('.tw-catalogItemNarrow__title');
+        return titleEl ? titleEl.textContent.toUpperCase().includes('LFE') : false;
+    }
+
+    function applyLfeBadge(card) {
+        if (!isLfeCard(card)) return;
+
+        const imageWrap = card.querySelector('.tw-catalogItemNarrow__image_ratio');
+        if (!imageWrap) return;
+        if (imageWrap.querySelector('.pnt-lfe-badge')) return; // ya inyectado
+
+        // El contenedor necesita position:relative para que el badge se posicione bien
+        imageWrap.style.position = 'relative';
+
+        const badge = document.createElement('img');
+        badge.className = 'pnt-lfe-badge';
+        badge.src = LFE_BADGE.url;
+        badge.alt = 'LFE';
+        badge.style.cssText = [
+            'position:absolute',
+            `top:${LFE_BADGE.top}`,
+            `left:${LFE_BADGE.left}`,
+            `width:${LFE_BADGE.width}`,
+            'height:auto',
+            'z-index:10',
+            'pointer-events:none',
+            'display:block'
+        ].join(';');
+
+        imageWrap.appendChild(badge);
+    }
+
     // ── Procesa todas las tarjetas visibles ───────────────────────────────
 
     function processCards() {
-        document.querySelectorAll('[data-tw-grid-item]').forEach(applyImage);
+        document.querySelectorAll('[data-tw-grid-item]').forEach(function (card) {
+            applyImage(card);
+            applyLfeBadge(card);
+        });
     }
 
     // ── Observer: vigila nuevas tarjetas Y cambios de style en imágenes ───
