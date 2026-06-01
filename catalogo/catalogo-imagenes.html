@@ -27,12 +27,15 @@
     // URL base de imágenes por id_netex (cursos no-PNT)
     const NETEX_IMAGE_BASE = 'https://apps.ivieducationcloud.com/campus_neo_course_images/';
 
+    // Altura de la imagen de la tarjeta (se aplica via inline style, sobreescribe CSS)
+    const IMAGE_HEIGHT = '190px';  // ← cambia este valor
+
     // Badge LFE
     const LFE_BADGE = {
         url:   'https://ivirma.actuatxp.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/LFE-badge.png',
-        width: '36px',   // ← cambia este valor para ajustar el tamaño
-        top:   '8px',
-        right:  '8px'
+        width: '34px',   // ← cambia este valor para ajustar el tamaño
+        top:   '12px',
+        right:  '10px'
     };
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -124,6 +127,27 @@
 
         // La imagen solo se asigna una vez
         if (card.getAttribute('data-cat-img-done') === 'true') return;
+
+        // Aplicar altura fija via inline style (sobreescribe cualquier CSS)
+        var imageBox   = card.querySelector('.tw-catalogItemNarrow__image');
+        var imageRatio = card.querySelector('.tw-catalogItemNarrow__image_ratio');
+        var imageImg   = card.querySelector('.tw-catalogItemNarrow__image_ratio_img');
+        if (imageBox) {
+            imageBox.style.cssText = 'padding-top:0 !important;height:' + IMAGE_HEIGHT + ';min-height:' + IMAGE_HEIGHT + ';position:relative;overflow:hidden';
+        }
+        if (imageRatio) {
+            imageRatio.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden';
+        }
+        if (imageImg) {
+            imageImg.style.position   = 'absolute';
+            imageImg.style.top        = '0';
+            imageImg.style.left       = '0';
+            imageImg.style.width      = '100%';
+            imageImg.style.height     = '100%';
+            imageImg.style.backgroundSize     = 'cover';
+            imageImg.style.backgroundPosition = 'center';
+            imageImg.style.backgroundRepeat   = 'no-repeat';
+        }
 
         const title   = getTitle(card);
         const idNetex = extractIdNetex(card);
