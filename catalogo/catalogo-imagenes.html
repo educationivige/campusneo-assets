@@ -125,17 +125,17 @@
             }
         }
 
-        // Badge LFE
+        // Badge LFE — se pone en __image (position:relative por CSS) para quedar
+        // por encima del __image_ratio y su overflow:hidden no lo recorte
         if (isLfe(card)) {
-            const imageWrap = card.querySelector('.tw-catalogItemNarrow__image_ratio');
-            if (imageWrap && !imageWrap.querySelector('.lfe-badge')) {
-                imageWrap.style.position = 'relative';
+            const imageContainer = card.querySelector('.tw-catalogItemNarrow__image');
+            if (imageContainer && !imageContainer.querySelector('.lfe-badge')) {
                 const badge = document.createElement('img');
                 badge.className = 'lfe-badge';
                 badge.src = LFE_BADGE.url;
                 badge.alt = 'LFE';
-                badge.style.cssText = 'position:absolute;top:' + LFE_BADGE.top + ';left:' + LFE_BADGE.left + ';width:' + LFE_BADGE.width + ';height:auto;z-index:10;pointer-events:none;display:block';
-                imageWrap.appendChild(badge);
+                badge.style.cssText = 'position:absolute;top:' + LFE_BADGE.top + ';left:' + LFE_BADGE.left + ';width:' + LFE_BADGE.width + ';height:auto;z-index:20;pointer-events:none;display:block';
+                imageContainer.appendChild(badge);
             }
         }
 
