@@ -2102,7 +2102,7 @@ h2#instance-8378-header {
   font-weight: 900;
   content: "\f017";
   color: var(--color-primary-light);
-  font-size: 14px;
+  font-size: 12px;
   margin-right: 4px;
   vertical-align: middle;
 }
@@ -2112,7 +2112,7 @@ h2#instance-8378-header {
   font-weight: 900;
   content: "\f073";
   color: var(--color-primary-light);
-  font-size: 14px;
+  font-size: 12px;
   margin-right: 4px;
   vertical-align: middle;
 }
@@ -5452,18 +5452,13 @@ div:has(> #region-main) > #block-region-side-post {
   background-repeat: no-repeat !important;
 }
 
-/* Badge tipo */
-#page-totara-catalog-index .tw-catalogItemNarrow__textarea_group_item.itemtype {
-  display: inline-block !important;
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--color-primary-light) !important;
-  /*background: rgba(0, 183, 189, 0.1) !important;*/
-  /*padding: 1px 5px !important;*/
-  /*border-radius: var(--border-radius-small) !important;*/
+/* Elementos ocultos en tarjeta */
+#page-totara-catalog-index .tw-catalogItemNarrow__textarea_group_item.itemtype,
+#page-totara-catalog-index .tw-catalogItemNarrow__noprogress {
+  display: none !important;
 }
+
+/* Badge tipo — oculto (ver "Elementos ocultos en tarjeta" arriba) */
 
 /* Título */
 #page-totara-catalog-index .tw-catalogItemNarrow__title {
@@ -5483,6 +5478,11 @@ div:has(> #region-main) > #block-region-side-post {
 #page-totara-catalog-index .tw-catalogItemNarrow__textarea_group_item:not(.itemtype) {
   font-size: 12px;
   color: var(--color-text-gray);
+}
+
+/* Contenido tarjeta */
+#page-totara-catalog-index .tw-catalogItemNarrow__content {
+  padding: var(--gap-4) !important;
 }
 
 /* ── Botón "Carga más" ───────────────────────────────────────── */
