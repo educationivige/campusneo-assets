@@ -47,17 +47,14 @@
     }
 
     function isLfe(card) {
-        // Busca "LFE" en los campos del filtro_bloque renderizados en la tarjeta
-        // (.tw-catalogItemNarrow__textarea_group_item incluye campos visibles y ocultos)
+        // Los valores LFE del filtro_bloque son: "Curso de Excelencia LFE",
+        // "LFE Excelencia MRP", "LFE Excelencia MS", "LFE Obligatorio Curso",
+        // "LFE Obligatorio PNT", "LFE Presentación" — todos contienen "LFE".
+        // Si el campo filtro_bloque está configurado como campo visible en la
+        // tarjeta del catálogo, aparecerá en un .tw-catalogItemNarrow__textarea_group_item.
         var items = card.querySelectorAll('.tw-catalogItemNarrow__textarea_group_item');
         for (var i = 0; i < items.length; i++) {
-            if (items[i].textContent.trim().toUpperCase() === 'LFE') return true;
-        }
-
-        // Fallback: busca "LFE" como valor en cualquier atributo del elemento raíz
-        // (por si Totara lo expone en un data-*)
-        for (var j = 0; j < card.attributes.length; j++) {
-            if (card.attributes[j].value.toUpperCase().includes('LFE')) return true;
+            if (items[i].textContent.trim().toUpperCase().includes('LFE')) return true;
         }
 
         return false;
