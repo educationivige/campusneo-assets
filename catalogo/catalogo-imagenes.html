@@ -47,17 +47,17 @@
     }
 
     function isLfe(card) {
-        // Busca "lfe" en el atributo title del elemento raíz (suele contener el fullname)
-        var rootTitle = (card.getAttribute('title') || '').toUpperCase();
-        if (rootTitle.includes('LFE')) return true;
+        var needle = 'LEARNING FOR EXCELLENCE';
 
-        // Busca en todo el texto de la tarjeta (incluye campos ocultos con el shortname)
-        var fullText = card.textContent.toUpperCase();
-        if (fullText.includes('LFE_') || fullText.includes('LFE ')) return true;
+        // Busca en el atributo title del elemento raíz
+        if ((card.getAttribute('title') || '').toUpperCase().includes(needle)) return true;
 
-        // Busca en cualquier atributo data-* del elemento raíz
+        // Busca en todo el texto de la tarjeta (incluye campos ocultos)
+        if (card.textContent.toUpperCase().includes(needle)) return true;
+
+        // Busca en cualquier atributo del elemento raíz
         for (var i = 0; i < card.attributes.length; i++) {
-            if (card.attributes[i].value.toUpperCase().includes('LFE')) return true;
+            if (card.attributes[i].value.toUpperCase().includes(needle)) return true;
         }
 
         return false;
