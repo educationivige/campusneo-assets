@@ -46,11 +46,26 @@
         return title.toUpperCase().includes('PNT');
     }
 
+    // Devuelve true si alguna opción LFE del filtro_bloque está activa en el sidebar
+    function lfeFilterActive() {
+        var selector = '[data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"]';
+        var filterEl = document.querySelector(selector);
+        if (!filterEl) return false;
+        var activeOptions = filterEl.querySelectorAll('[aria-selected="true"]');
+        for (var i = 0; i < activeOptions.length; i++) {
+            var label = activeOptions[i].querySelector('.tw-selectMulti__link_text');
+            if (label && label.textContent.trim().toUpperCase().includes('LFE')) return true;
+        }
+        return false;
+    }
+
     function isLfe(card) {
+        // Si el filtro LFE está activo, todos los cursos visibles son LFE
+        if (lfeFilterActive()) return true;
+        // Fallback: título contiene "Learning for Excellence" o "LFE"
         var title = card.querySelector('.tw-catalogItemNarrow__title');
         if (!title) return false;
         var t = title.textContent.toUpperCase();
-        // Cubre "LFE Presentación...", "LFE Obligatorio..." Y "Learning for Excellence..."
         return t.includes('LFE') || t.includes('LEARNING FOR EXCELLENCE');
     }
 
@@ -196,6 +211,28 @@
         });
     }
 
+    // ── Observer sobre el filtro_bloque para re-badgear al cambiar filtro ────────
+
+    function observarFiltro() {
+        var selector = '[data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"]';
+
+        function watchFilter() {
+            var filterEl = document.querySelector(selector);
+            if (!filterEl) return;
+
+            var obs = new MutationObserver(function () {
+                // Al cambiar el filtro, quitar badges existentes y re-aplicar
+                document.querySelectorAll('.lfe-badge').forEach(function (b) { b.remove(); });
+                setTimeout(procesarTodo, 400);
+            });
+
+            obs.observe(filterEl, { attributes: true, subtree: true, attributeFilter: ['aria-selected'] });
+        }
+
+        // Esperar a que el filtro esté en el DOM
+        [300, 800, 1500].forEach(function (ms) { setTimeout(watchFilter, ms); });
+    }
+
     // ── Init ──────────────────────────────────────────────────────────────────
 
     function init() {
@@ -203,6 +240,7 @@
         procesarTodo();
         observar();
         setupListeners();
+        observarFiltro();
         [500, 1200, 2500].forEach(function (ms) { setTimeout(procesarTodo, ms); });
     }
 
