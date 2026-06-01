@@ -5438,9 +5438,9 @@ div:has(> #region-main) > #block-region-side-post {
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: var(--color-primary-light) !important;
-  background: rgba(0, 183, 189, 0.1) !important;
-  padding: 1px 5px !important;
-  border-radius: var(--border-radius-small) !important;
+  /*background: rgba(0, 183, 189, 0.1) !important;*/
+  /*padding: 1px 5px !important;*/
+  /*border-radius: var(--border-radius-small) !important;*/
 }
 
 /* Título */
