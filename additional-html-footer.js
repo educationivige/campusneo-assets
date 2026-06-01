@@ -3350,7 +3350,12 @@ table.appendChild(tfoot);
         if (!imgEl) return;
 
         const imageUrl = resolveImage(card);
-        imgEl.style.backgroundImage = `url('${imageUrl}')`;
+        const newBg = `url('${imageUrl}')`;
+
+        // Evitar bucle infinito: si ya tiene nuestra imagen, no hacer nada
+        if (imgEl.style.backgroundImage === newBg) return;
+
+        imgEl.style.backgroundImage = newBg;
         imgEl.style.backgroundSize = 'cover';
         imgEl.style.backgroundPosition = 'center';
         imgEl.style.backgroundRepeat = 'no-repeat';
@@ -3362,14 +3367,32 @@ table.appendChild(tfoot);
         document.querySelectorAll('[data-tw-grid-item]').forEach(applyImage);
     }
 
-    // ── Observer para tarjetas cargadas dinámicamente ─────────────────────
+    // ── Observer: vigila nuevas tarjetas Y cambios de style en imágenes ───
+    // Totara asigna background-image via JS después de renderizar la tarjeta,
+    // por eso hay que observar también atributos (no solo childList).
 
     function observeGrid() {
         const grid = document.querySelector('section.tw-grid[role="list"]');
         if (!grid) return;
 
-        const observer = new MutationObserver(processCards);
-        observer.observe(grid, { childList: true, subtree: false });
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (m) {
+                // Cambio de style en un img_ratio_img: re-aplicar sólo esa tarjeta
+                if (m.type === 'attributes' && m.target.classList.contains('tw-catalogItemNarrow__image_ratio_img')) {
+                    const card = m.target.closest('[data-tw-grid-item]');
+                    if (card) applyImage(card);
+                } else {
+                    processCards();
+                }
+            });
+        });
+
+        observer.observe(grid, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style']
+        });
     }
 
     // ── Init con reintentos por carga asíncrona del catálogo ──────────────
