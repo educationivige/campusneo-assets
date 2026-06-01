@@ -5162,6 +5162,37 @@ div:has(> #region-main) > #block-region-side-post {
    NOTA: No se toca display/flex/grid de Totara, solo estilos visuales
    ============================================================ */
 
+.tw-catalog__aside {
+  padding-right: 0px !important;
+}
+
+.tw-selectRegionPanel {
+  padding: 8px;
+}
+
+.tw-selectRegionPanel__selector > div {
+  margin-left: 0px !important;
+}
+
+.tw-selectRegionPanel__heading_text {
+  padding-top: 4px !important;
+}
+
+.tw-selectRegionPrimary__selector:last-of-type {
+  align-content: center !important;
+}
+
+.tw-selectRegionPrimary .tw-catalogResultsCount {
+  margin: auto 26px auto auto;
+  font-size: 16px;
+  font-weight: 500;
+  padding-top: 5px;
+}
+
+.tw-catalogItemNarrow__progress {
+  display: none !important;
+}
+
 /* ── Barra superior de filtro primario ───────────────────────── */
 #page-totara-catalog-index .tw-selectRegionPrimary > section:first-of-type {
   background: none !important;
@@ -5250,6 +5281,7 @@ div:has(> #region-main) > #block-region-side-post {
   border-radius: var(--border-radius-xl) !important;
   transition: border-color 0.2s, box-shadow 0.2s;
   padding-top: 6px !important;
+  margin-right: 10px !important;
 }
 
 #page-totara-catalog-index .tw-selectSearchText__field:focus-within {
@@ -5332,7 +5364,7 @@ div:has(> #region-main) > #block-region-side-post {
 }
 
 #page-totara-catalog-index .tw-selectRegionPanel__selector_header {
-  padding: 11px 18px;
+  padding: 11px 12px !important;
   font-size: 11px;
   font-weight: 700;
   color: var(--color-primary);
