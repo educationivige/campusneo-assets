@@ -5409,12 +5409,28 @@ div:has(> #region-main) > #block-region-side-post {
   border-color: var(--color-primary-light) !important;
 }
 
+/* Altura fija 190px, ancho adapta a la card, sin cambiar el alto */
+#page-totara-catalog-index .tw-catalogItemNarrow__image {
+  padding-top: 0 !important;
+  height: 190px !important;
+  position: relative !important;
+}
+
 #page-totara-catalog-index .tw-catalogItemNarrow__image_ratio {
   overflow: hidden;
   background: var(--color-background);
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 #page-totara-catalog-index .tw-catalogItemNarrow__image_ratio_img {
+  width: 100% !important;
+  height: 100% !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
   transition: transform 0.3s ease;
 }
 
