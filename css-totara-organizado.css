@@ -5294,6 +5294,7 @@ div:has(> #region-main) > #block-region-side-post {
   border: none !important;
   background: transparent !important;
   outline: none !important;
+  padding-bottom: 5px;
   box-shadow: none !important;
   font-size: 14px;
   color: var(--color-primary);
@@ -5301,6 +5302,10 @@ div:has(> #region-main) > #block-region-side-post {
 
 #page-totara-catalog-index .tw-selectSearchText__field_input::placeholder {
   color: var(--color-text-light);
+}
+
+.tw-selectSearchText__field_clear .flex-icon {
+  padding-bottom: 5px;
 }
 
 /* Botón lupa: círculo perfecto */
