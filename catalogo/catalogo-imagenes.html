@@ -48,7 +48,10 @@
 
     function isLfe(card) {
         var title = card.querySelector('.tw-catalogItemNarrow__title');
-        return title ? title.textContent.toUpperCase().includes('LFE') : false;
+        if (!title) return false;
+        var t = title.textContent.toUpperCase();
+        // Cubre "LFE Presentación...", "LFE Obligatorio..." Y "Learning for Excellence..."
+        return t.includes('LFE') || t.includes('LEARNING FOR EXCELLENCE');
     }
 
     function resolvePntImage(title) {
@@ -87,43 +90,39 @@
 
     // ── Lógica principal por tarjeta ──────────────────────────────────────────
 
+    // Badge LFE — siempre se comprueba, independientemente de data-cat-img-done
+    function applyLfeBadge(card) {
+        if (!isLfe(card)) return;
+        const imageContainer = card.querySelector('.tw-catalogItemNarrow__image');
+        if (!imageContainer || imageContainer.querySelector('.lfe-badge')) return;
+        const badge = document.createElement('img');
+        badge.className = 'lfe-badge';
+        badge.src = LFE_BADGE.url;
+        badge.alt = 'LFE';
+        badge.style.cssText = 'position:absolute;top:' + LFE_BADGE.top + ';right:' + LFE_BADGE.right + ';width:' + LFE_BADGE.width + ';height:auto;z-index:20;pointer-events:none;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35))';
+        imageContainer.appendChild(badge);
+    }
+
     function procesarCard(card) {
-        // Usamos flag propio (data-cat-img-done) para no depender del flag
-        // del script externo (data-id-netex-processed), que puede llegar antes que el nuestro.
+        // El badge se aplica siempre (incluso en tarjetas ya procesadas)
+        applyLfeBadge(card);
+
+        // La imagen solo se asigna una vez
         if (card.getAttribute('data-cat-img-done') === 'true') return;
 
         const title   = getTitle(card);
         const idNetex = extractIdNetex(card);
         const imageEl = card.querySelector('.tw-catalogItemNarrow__image_ratio_img');
 
-        // Asignar imagen
         if (imageEl) {
-            let imageUrl;
             if (isPnt(title)) {
-                // PNT: imagen por keyword, siempre válida
-                imageUrl = resolvePntImage(title);
-                applyBackground(imageEl, imageUrl);
+                applyBackground(imageEl, resolvePntImage(title));
             } else if (idNetex) {
-                // No-PNT: probamos la URL de id_netex; si da 404 usamos el default
                 var candidata = NETEX_IMAGE_BASE + idNetex + '_dashboard.jpg';
                 var probe = new Image();
                 probe.onload  = function () { applyBackground(imageEl, candidata); };
                 probe.onerror = function () { applyBackground(imageEl, PNT_DEFAULT_IMAGE); };
                 probe.src = candidata;
-            }
-        }
-
-        // Badge LFE — se pone en __image (position:relative por CSS) para quedar
-        // por encima del __image_ratio y su overflow:hidden no lo recorte
-        if (isLfe(card)) {
-            const imageContainer = card.querySelector('.tw-catalogItemNarrow__image');
-            if (imageContainer && !imageContainer.querySelector('.lfe-badge')) {
-                const badge = document.createElement('img');
-                badge.className = 'lfe-badge';
-                badge.src = LFE_BADGE.url;
-                badge.alt = 'LFE';
-                badge.style.cssText = 'position:absolute;top:' + LFE_BADGE.top + ';right:' + LFE_BADGE.right + ';width:' + LFE_BADGE.width + ';height:auto;z-index:20;pointer-events:none;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35))';
-                imageContainer.appendChild(badge);
             }
         }
 
