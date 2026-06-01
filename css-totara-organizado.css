@@ -5409,47 +5409,12 @@ div:has(> #region-main) > #block-region-side-post {
   border-color: var(--color-primary-light) !important;
 }
 
-/* Altura fija 190px, ancho adapta a la card, sin cambiar el alto */
-#page-totara-catalog-index .tw-catalogItemNarrow__image {
-  padding-top: 0 !important;
-  height: 190px !important;
-  min-height: 190px !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-#page-totara-catalog-index .tw-catalogItemNarrow__image_ratio {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  overflow: hidden !important;
-  background: var(--color-background);
-}
-
 #page-totara-catalog-index .tw-catalogItemNarrow__image_ratio_img {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
   transition: transform 0.3s ease;
 }
 
 #page-totara-catalog-index .tw-catalogItemNarrow:hover .tw-catalogItemNarrow__image_ratio_img {
   transform: scale(1.05);
-}
-
-/* Placeholder sin imagen */
-#page-totara-catalog-index .tw-catalogItemNarrow__image_ratio_img:not([style*="background-image"]) {
-  background-image: url('https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/default.png') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
 }
 
 /* Elementos ocultos en tarjeta */
