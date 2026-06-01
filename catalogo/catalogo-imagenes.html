@@ -73,6 +73,17 @@
         return card.getAttribute('data-id-netex-value') || null;
     }
 
+    // ── Aplicar background con guardia anti-bucle ─────────────────────────────
+
+    function applyBackground(imageEl, imageUrl) {
+        var newBg = "url('" + imageUrl + "')";
+        if (imageEl.style.backgroundImage === newBg) return;
+        imageEl.style.backgroundImage    = newBg;
+        imageEl.style.backgroundSize     = 'cover';
+        imageEl.style.backgroundPosition = 'center';
+        imageEl.style.backgroundRepeat   = 'no-repeat';
+    }
+
     // ── Lógica principal por tarjeta ──────────────────────────────────────────
 
     function procesarCard(card) {
@@ -88,19 +99,16 @@
         if (imageEl) {
             let imageUrl;
             if (isPnt(title)) {
+                // PNT: imagen por keyword, siempre válida
                 imageUrl = resolvePntImage(title);
+                applyBackground(imageEl, imageUrl);
             } else if (idNetex) {
-                imageUrl = NETEX_IMAGE_BASE + idNetex + '_dashboard.jpg';
-            }
-            if (imageUrl) {
-                var newBg = "url('" + imageUrl + "')";
-                // Guardia anti-bucle: no tocar si ya pusimos esta misma imagen
-                if (imageEl.style.backgroundImage !== newBg) {
-                    imageEl.style.backgroundImage    = newBg;
-                    imageEl.style.backgroundSize     = 'cover';
-                    imageEl.style.backgroundPosition = 'center';
-                    imageEl.style.backgroundRepeat   = 'no-repeat';
-                }
+                // No-PNT: probamos la URL de id_netex; si da 404 usamos el default
+                var candidata = NETEX_IMAGE_BASE + idNetex + '_dashboard.jpg';
+                var probe = new Image();
+                probe.onload  = function () { applyBackground(imageEl, candidata); };
+                probe.onerror = function () { applyBackground(imageEl, PNT_DEFAULT_IMAGE); };
+                probe.src = candidata;
             }
         }
 
