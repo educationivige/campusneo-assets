@@ -47,17 +47,8 @@
     }
 
     function isLfe(card) {
-        // Los valores LFE del filtro_bloque son: "Curso de Excelencia LFE",
-        // "LFE Excelencia MRP", "LFE Excelencia MS", "LFE Obligatorio Curso",
-        // "LFE Obligatorio PNT", "LFE Presentación" — todos contienen "LFE".
-        // Si el campo filtro_bloque está configurado como campo visible en la
-        // tarjeta del catálogo, aparecerá en un .tw-catalogItemNarrow__textarea_group_item.
-        var items = card.querySelectorAll('.tw-catalogItemNarrow__textarea_group_item');
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].textContent.trim().toUpperCase().includes('LFE')) return true;
-        }
-
-        return false;
+        var title = card.querySelector('.tw-catalogItemNarrow__title');
+        return title ? title.textContent.toUpperCase().includes('LFE') : false;
     }
 
     function resolvePntImage(title) {
