@@ -30,9 +30,9 @@
     // Badge LFE
     const LFE_BADGE = {
         url:   'https://ivirma.actuatxp.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/LFE-badge.png',
-        width: '72px',   // ← cambia este valor para ajustar el tamaño
+        width: '36px',   // ← cambia este valor para ajustar el tamaño
         top:   '8px',
-        left:  '8px'
+        right:  '8px'
     };
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -134,7 +134,7 @@
                 badge.className = 'lfe-badge';
                 badge.src = LFE_BADGE.url;
                 badge.alt = 'LFE';
-                badge.style.cssText = 'position:absolute;top:' + LFE_BADGE.top + ';left:' + LFE_BADGE.left + ';width:' + LFE_BADGE.width + ';height:auto;z-index:20;pointer-events:none;display:block';
+                badge.style.cssText = 'position:absolute;top:' + LFE_BADGE.top + ';left:' + LFE_BADGE.left + ';width:' + LFE_BADGE.width + ';height:auto;z-index:20;pointer-events:none;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35))';
                 imageContainer.appendChild(badge);
             }
         }
