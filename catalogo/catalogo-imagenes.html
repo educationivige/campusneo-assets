@@ -46,8 +46,21 @@
         return title.toUpperCase().includes('PNT');
     }
 
-    function isLfe(title) {
-        return title.toUpperCase().includes('LFE');
+    function isLfe(card) {
+        // Busca "lfe" en el atributo title del elemento raíz (suele contener el fullname)
+        var rootTitle = (card.getAttribute('title') || '').toUpperCase();
+        if (rootTitle.includes('LFE')) return true;
+
+        // Busca en todo el texto de la tarjeta (incluye campos ocultos con el shortname)
+        var fullText = card.textContent.toUpperCase();
+        if (fullText.includes('LFE_') || fullText.includes('LFE ')) return true;
+
+        // Busca en cualquier atributo data-* del elemento raíz
+        for (var i = 0; i < card.attributes.length; i++) {
+            if (card.attributes[i].value.toUpperCase().includes('LFE')) return true;
+        }
+
+        return false;
     }
 
     function resolvePntImage(title) {
@@ -113,7 +126,7 @@
         }
 
         // Badge LFE
-        if (isLfe(title)) {
+        if (isLfe(card)) {
             const imageWrap = card.querySelector('.tw-catalogItemNarrow__image_ratio');
             if (imageWrap && !imageWrap.querySelector('.lfe-badge')) {
                 imageWrap.style.position = 'relative';
