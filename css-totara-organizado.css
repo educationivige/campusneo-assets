@@ -5276,11 +5276,13 @@ div:has(> #region-main) > #block-region-side-post {
 
 /* ── Buscador ────────────────────────────────────────────────── */
 #page-totara-catalog-index .tw-selectSearchText__field {
+  display: flex !important;
+  align-items: center !important;
   background: #fff !important;
   border: 2px solid transparent;
   border-radius: var(--border-radius-xl) !important;
   transition: border-color 0.2s, box-shadow 0.2s;
-  padding-top: 6px !important;
+  padding: 0 10px !important;
   margin-right: 10px !important;
 }
 
@@ -5294,18 +5296,25 @@ div:has(> #region-main) > #block-region-side-post {
   border: none !important;
   background: transparent !important;
   outline: none !important;
-  padding-bottom: 5px;
+  padding: 0 !important;
   box-shadow: none !important;
   font-size: 14px;
   color: var(--color-primary);
+  flex: 1;
 }
 
 #page-totara-catalog-index .tw-selectSearchText__field_input::placeholder {
   color: var(--color-text-light);
 }
 
+#page-totara-catalog-index .tw-selectSearchText__field_clear {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1;
+}
+
 .tw-selectSearchText__field_clear .flex-icon {
-  padding-bottom: 5px;
+  padding-bottom: 0;
 }
 
 /* Botón lupa: círculo perfecto */
@@ -5326,6 +5335,22 @@ div:has(> #region-main) > #block-region-side-post {
 
 #page-totara-catalog-index .tw-selectSearchText__btn:hover {
   background: var(--color-primary-light) !important;
+}
+
+/* ── Toggle vista lista/ficha ────────────────────────────────── */
+#page-totara-catalog-index .tw-catalogItemStyleToggle__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-small);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.18);
+  transition: box-shadow 0.15s, background 0.15s;
+}
+
+#page-totara-catalog-index .tw-catalogItemStyleToggle__btn:hover {
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.26);
 }
 
 /* ── Sidebar de filtros ──────────────────────────────────────── */
@@ -5460,6 +5485,11 @@ div:has(> #region-main) > #block-region-side-post {
   display: none !important;
 }
 
+/* Descripción — oculta en narrow, visible en wide */
+#page-totara-catalog-index .tw-catalogItemNarrow__description {
+  display: none !important;
+}
+
 /* Badge tipo — oculto (ver "Elementos ocultos en tarjeta" arriba) */
 
 /* Título */
@@ -5485,6 +5515,54 @@ div:has(> #region-main) > #block-region-side-post {
 /* Contenido tarjeta */
 #page-totara-catalog-index .tw-catalogItemNarrow__content {
   padding: var(--gap-4) !important;
+}
+
+/* ── Iconos metadatos vista Wide ─────────────────────────────── */
+#page-totara-catalog-index .tw-catalogItemWide__textarea_group_item:nth-child(3) {
+  display: none !important;
+}
+
+#page-totara-catalog-index .tw-catalogItemWide__textarea_group_item:first-child::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f017";
+  color: var(--color-primary-light);
+  font-size: 12px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+#page-totara-catalog-index .tw-catalogItemWide__textarea_group_item:nth-child(2)::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f073";
+  color: var(--color-primary-light);
+  font-size: 12px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* ── Vista Wide: altura contenedor y título ──────────────────── */
+.tw-catalogItemWide__content_left {
+    height: 150px;
+}
+
+.tw-catalogItemWide__ellipsis {
+    padding: 2px 30px 10px 20px;
+    font-size: 18px;
+    color: var(--color-title-catalog-box);
+}
+
+/* ── Resumen en tarjeta Wide ─────────────────────────────────── */
+#page-totara-catalog-index .neo-wide-summary {
+  font-size: 12px;
+  color: var(--color-text-gray);
+  line-height: 1.45;
+  margin: 5px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ── Botón "Carga más" ───────────────────────────────────────── */
