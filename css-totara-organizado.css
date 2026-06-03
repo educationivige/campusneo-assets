@@ -175,17 +175,20 @@ a[href*="/message/edit.php"] {
   font-family: "Font Awesome 6 Free" !important;
   font-weight: 900 !important;
   content: "\f013" !important; /* fa-gear */
+  color: var(--color-icons);
+  margin-right: 8px;
+  font-size: 19px;
 }
 
 .flex-icon.email.actua-icon::before {
   font-family: "Font Awesome 6 Free" !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   content: "\f0e0" !important; /* fa-envelope */
 }
 
 .flex-icon.notification-non-filled.actua-icon::before {
   font-family: "Font Awesome 6 Free" !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   content: "\f0f3" !important; /* fa-bell */
 }
 
