@@ -171,7 +171,6 @@ a[href*="/message/edit.php"] {
 }
 
 /* --- 1.9 Iconos navegación (FA Regular) --- */
-.totara_core__QuickAccess_icon .flex-icon[data-flex-icon="settings"]::before,
 .popover-region-messages .popover-region-toggle .flex-icon[data-flex-icon="email"]::before,
 .popover-region-notifications .popover-region-toggle .flex-icon[data-flex-icon="notification-non-filled"]::before {
   font-family: "Font Awesome 6 Free" !important;
@@ -179,6 +178,8 @@ a[href*="/message/edit.php"] {
 }
 
 .totara_core__QuickAccess_icon .flex-icon[data-flex-icon="settings"]::before {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important; /* fa-gear solo disponible en Solid en FA6 Free */
   content: "\f013" !important; /* fa-gear */
 }
 
