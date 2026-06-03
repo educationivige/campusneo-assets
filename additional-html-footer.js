@@ -2450,7 +2450,7 @@ const InformeTutorButton = {
     },
 
 buildReportUrl: function(shortname) {
-    // Detectar tenant IMR y usar dominio correspondiente
+    // [TENANT IMR] — imrcampus.com usa dominio propio para el report
     const isImrTenant = document.body.classList.contains('tenant-user-imr');
     const baseUrl = isImrTenant
         ? 'https://imrcampus.com/totara/reportbuilder/report.php'

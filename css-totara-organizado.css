@@ -3492,6 +3492,7 @@ div#region-main #inst214.block .content {
    20. BLOQUES PNTs
    ============================================================ */
 
+/* #inst10236 = bloque PNT del tenant IMR (imrcampus.com) — estilos propios en imr/css-tenant-imr.css */
 #inst291 thead,
 #inst797 thead,
 #inst215 thead,
@@ -3588,14 +3589,6 @@ div#region-main #inst230.block .content {
   border-bottom-left-radius: var(--border-radius);
 }
 
-#inst10236 td a img.course_iconn {
-  background: var(--color-primary) !important;
-     padding: 14px;
-  max-width: 65px !important;
-  max-height: 65px !important;
-  border-top-left-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
-}
 
 /* --- #inst10405 bloques PNTs completados --- */
 #inst10405 .totara-table-container {
