@@ -170,12 +170,32 @@ a[href*="/message/edit.php"] {
   font-weight: 500;
 }
 
-/* --- 1.9 Breadcrumbs --- */
+/* --- 1.9 Iconos navegación (FA Regular) --- */
+.totara_core__QuickAccess_icon .flex-icon[data-flex-icon="settings"]::before,
+.popover-region-messages .popover-region-toggle .flex-icon[data-flex-icon="email"]::before,
+.popover-region-notifications .popover-region-toggle .flex-icon[data-flex-icon="notification-non-filled"]::before {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 400 !important;
+}
+
+.totara_core__QuickAccess_icon .flex-icon[data-flex-icon="settings"]::before {
+  content: "\f013" !important; /* fa-gear */
+}
+
+.popover-region-messages .popover-region-toggle .flex-icon[data-flex-icon="email"]::before {
+  content: "\f0e0" !important; /* fa-envelope */
+}
+
+.popover-region-notifications .popover-region-toggle .flex-icon[data-flex-icon="notification-non-filled"]::before {
+  content: "\f0f3" !important; /* fa-bell */
+}
+
+/* --- 1.11 Breadcrumbs --- */
 .breadcrumb li:nth-child(2):has(a[href*="reports"]) {
     display: none;
 }
 
-/* --- 1.10 Responsive general --- */
+/* --- 1.12 Responsive general --- */
 @media (min-width: 768px) {
   .totaraNav_prim .masthead_logo--header_img {
     max-width: 250px;
