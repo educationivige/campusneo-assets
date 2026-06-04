@@ -551,7 +551,36 @@ a[href*="/message/edit.php"] {
   transform: scale(1.03);
 }
 
-/* --- .cta_lfe y sub-selectores --- */
+/* --- Hero a ancho completo --- */
+/* El fullscreen.css del tema ya hace el breakout (width:calc(100vw-8px) +
+   left:calc(-50vw+50%)), pero lo limita con max-width:1650px y en pantallas
+   >=1680px lo deja pegado a la izquierda (left:0). Quitamos ese tope y
+   restauramos el centrado para que el hero ocupe el ancho completo del viewport.
+   No tocamos los anchos internos de slick (track/slide), que el plugin calcula
+   sobre el bloque ya a ancho completo al inicializarse. */
+.has-full-page-slider #block-region-top .block_slickslider.fullwidth-slider {
+  width: 100vw !important;
+  max-width: none !important;
+}
+
+@media (min-width: 1680px) {
+  .has-full-page-slider #block-region-top .block_slickslider.fullwidth-slider {
+    left: calc(-50vw + 50%) !important;
+  }
+}
+
+.block_slickslider .conttext {
+  padding-left: 5em;
+}
+
+/* Texto del hero alineado con el inicio del contenido (contenedor max-width:1680px,
+   centrado). Por debajo de 1680px el margen base manda; por encima se suma el
+   centrado (100vw-1680px)/2. Ajustar el 15px si el padding base del contenedor
+   fuese distinto. */
+.has-full-page-slider #inst223.fullwidth-slider .conttext {
+  padding-left: max(15px, calc((100vw - 1680px) / 2 + 15px)) !important;
+  padding-right: 70px;
+}
 .cta_lfe .content.block-content {
   background-image: url("https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/bg-lfe-cta.jpg") !important;
   background-position: center !important;
