@@ -530,6 +530,17 @@ a[href*="/message/edit.php"] {
   max-width: 420px;
 }
 
+/* ── Hero principal (inst223): ancho total de pantalla ───────── */
+#block-region-top:has(#inst223) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+#inst223 {
+  margin: 0 !important;
+  width: 100% !important;
+}
+
 .hero-principal .btn-banner,
 .vimeo-trigger-btn {
   padding: 12px 25px;
