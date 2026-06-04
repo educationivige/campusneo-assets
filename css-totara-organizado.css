@@ -531,11 +531,7 @@ a[href*="/message/edit.php"] {
 }
 
 /* ── Hero principal (inst223): ancho total de pantalla ───────── */
-#block-region-top:has(#inst223) {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
+/* El padding del col se elimina vía JS (additional-html-footer.js) */
 #inst223 {
   margin: 0 !important;
   width: 100% !important;

@@ -3529,3 +3529,23 @@ table.appendChild(tfoot);
         schedule();
     }
 })();
+
+// ── Hero inst223: ancho completo de pantalla ──────────────────────────────
+(function () {
+    if (!document.getElementById('inst223')) return;
+
+    function fixHeroWidth() {
+        var col = document.getElementById('block-region-top');
+        if (col) {
+            col.style.paddingLeft = '0';
+            col.style.paddingRight = '0';
+        }
+        window.dispatchEvent(new Event('resize'));
+    }
+
+    if (document.readyState === 'complete') {
+        fixHeroWidth();
+    } else {
+        window.addEventListener('load', fixHeroWidth);
+    }
+})();
