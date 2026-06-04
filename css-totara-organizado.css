@@ -2115,11 +2115,11 @@ h2#instance-8378-header {
   display: none !important;
 }
 
-.tw-catalogItemNarrow__image {
+#page-totara-catalog-index .tw-catalogItemNarrow__image {
   padding-top: 55%;
 }
 
-.tw-catalogItemNarrow__textarea_group .tw-catalogItemNarrow__textarea_group_item:first-child::before {
+#page-totara-catalog-index .tw-catalogItemNarrow__textarea_group .tw-catalogItemNarrow__textarea_group_item:first-child::before {
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
   content: "\f017";
@@ -2129,7 +2129,7 @@ h2#instance-8378-header {
   vertical-align: middle;
 }
 
-.tw-catalogItemNarrow__textarea_group .tw-catalogItemNarrow__textarea_group_item:nth-child(2)::before {
+#page-totara-catalog-index .tw-catalogItemNarrow__textarea_group .tw-catalogItemNarrow__textarea_group_item:nth-child(2)::before {
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
   content: "\f073";
@@ -2139,95 +2139,95 @@ h2#instance-8378-header {
   vertical-align: middle;
 }
 
-.tenant-user .tw-catalogItemNarrow__textarea_group .tw-catalogItemNarrow__textarea_group_item:nth-child(2) {
+.tenant-user #page-totara-catalog-index .tw-catalogItemNarrow__textarea_group .tw-catalogItemNarrow__textarea_group_item:nth-child(2) {
   display: none;
 }
 
-.tw-catalogItemNarrow__textarea_group_item.itemtype {
+#page-totara-catalog-index .tw-catalogItemNarrow__textarea_group_item.itemtype {
   color: var(--color-secondary) !important;
   font-weight: 500 !important;
 }
 
-.catalog__content .tw-selectRegionPanel.tw-selectRegionPanel__hiddenOnSmall {
+#page-totara-catalog-index .catalog__content .tw-selectRegionPanel.tw-selectRegionPanel__hiddenOnSmall {
   min-width: 200px !important;
 }
 
 @media (min-width: 500px) {
-  .catalog__content .tw-catalog__aside {
+  #page-totara-catalog-index .catalog__content .tw-catalog__aside {
     padding-right: var(--spacing-small) !important;
   }
 
-  .tw-selectRegionPanel.tw-selectRegionPanel__hiddenOnSmall {
+  #page-totara-catalog-index .tw-selectRegionPanel.tw-selectRegionPanel__hiddenOnSmall {
     min-width: 210px !important;
   }
 }
 
-.tw-catalogResultsShare__btn.btn,
-.tw-catalog__page_heading h2 {
+#page-totara-catalog-index .tw-catalogResultsShare__btn.btn,
+#page-totara-catalog-index .tw-catalog__page_heading h2 {
   display: none;
 }
 
-.tw-catalog__results {
+#page-totara-catalog-index .tw-catalog__results {
   padding: 0 1em;
 }
 
 /* Filtros catálogo */
-.tenant-user .tw-catalog__primaryFilter .tw-selectRegionPrimary__selector .tw-selectTree {
+.tenant-user #page-totara-catalog-index .tw-catalog__primaryFilter .tw-selectRegionPrimary__selector .tw-selectTree {
   display: none;
 }
 
-.tenant-user section.tw-selectRegionPanel__selector:has(#cfp_menu_acreditacionmla_c4e1f) {
+.tenant-user #page-totara-catalog-index section.tw-selectRegionPanel__selector:has(#cfp_menu_acreditacionmla_c4e1f) {
   display: none;
 }
 
-.tw-selectRegionPanel__selector:has(#cfp_multiselect_areaextreaexter_543bf) {
+#page-totara-catalog-index .tw-selectRegionPanel__selector:has(#cfp_multiselect_areaextreaexter_543bf) {
   display: none;
 }
 
-.tenant-user-ext section.tw-selectRegionPanel__selector:has(#cfp_multiselect_areaextreaexter_543bf) {
+.tenant-user-ext #page-totara-catalog-index section.tw-selectRegionPanel__selector:has(#cfp_multiselect_areaextreaexter_543bf) {
   display: block !important;
 }
 
-.tenant-user-ext section.tw-selectRegionPanel__selector:has(#cfp_menu_catalogomlanges_7fade),
-.tenant-user-ext section.tw-selectRegionPanel__selector:has(#cfp_menu_filtrobloquemla_39281),
-.tenant-user-ext section.tw-selectRegionPanel__selector:has(#cfp_menu_areatematicamla_16616),
-.tenant-user-ext section.tw-selectRegionPanel__selector:has(#cfp_multiselect_idiomamlangesid_26ff0),
-.tenant-user-ext section.tw-selectRegionPanel__selector:has(#cfp_menu_areatematicamla_6da85) {
+.tenant-user-ext #page-totara-catalog-index section.tw-selectRegionPanel__selector:has(#cfp_menu_catalogomlanges_7fade),
+.tenant-user-ext #page-totara-catalog-index section.tw-selectRegionPanel__selector:has(#cfp_menu_filtrobloquemla_39281),
+.tenant-user-ext #page-totara-catalog-index section.tw-selectRegionPanel__selector:has(#cfp_menu_areatematicamla_16616),
+.tenant-user-ext #page-totara-catalog-index section.tw-selectRegionPanel__selector:has(#cfp_multiselect_idiomamlangesid_26ff0),
+.tenant-user-ext #page-totara-catalog-index section.tw-selectRegionPanel__selector:has(#cfp_menu_areatematicamla_6da85) {
   display: none;
 }
 
 /* Filtros de idiomas */
-[data-tw-selectmulti-key="cfp_multiselect_idiomamlangesid_95ebc"] .tw-selectMulti__list li:not(:has([data-tw-selectmulti-optionkey="EN"])):not(:has([data-tw-selectmulti-optionkey="ES"])) {
+#page-totara-catalog-index [data-tw-selectmulti-key="cfp_multiselect_idiomamlangesid_95ebc"] .tw-selectMulti__list li:not(:has([data-tw-selectmulti-optionkey="EN"])):not(:has([data-tw-selectmulti-optionkey="ES"])) {
   display: none;
 }
 
-.tenant-user-nam .tw-selectRegionPanel__selector:has(#cfp_multiselect_idiomamlangesid_95ebc),
-.tenant-user-nam .tw-selectRegionPanel__selector:has(#cfp_menu_filtrobloquemla_39281) {
+.tenant-user-nam #page-totara-catalog-index .tw-selectRegionPanel__selector:has(#cfp_multiselect_idiomamlangesid_95ebc),
+.tenant-user-nam #page-totara-catalog-index .tw-selectRegionPanel__selector:has(#cfp_menu_filtrobloquemla_39281) {
   display: none;
 }
 
-.lang-en [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(4)) {
+.lang-en #page-totara-catalog-index [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(4)) {
   display: none;
 }
 
-.lang-cs [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(4)) {
+.lang-cs #page-totara-catalog-index [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(4)) {
   display: none;
 }
 
-.lang-pt [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(3)) {
+.lang-pt #page-totara-catalog-index [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(3)) {
   display: none;
 }
 
-.lang-it [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(2)) {
+.lang-it #page-totara-catalog-index [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:nth-child(2)) {
   display: none;
 }
 
-.lang-es [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:first-child) {
+.lang-es #page-totara-catalog-index [data-tw-selectmulti-key="cfp_menu_filtrobloquemla_39281"] .tw-selectMulti__list li:not(:first-child) {
   display: none;
 }
 
-.tw-selectMulti__link_active,
-.tw-selectMulti__link:hover {
+#page-totara-catalog-index .tw-selectMulti__link_active,
+#page-totara-catalog-index .tw-selectMulti__link:hover {
   background: #fcefec;
 }
 
@@ -2277,7 +2277,7 @@ a.courserating-resume-lite {
   width: 65%;
 }
 
-.tw-catalog .tw-catalogItemNarrow__textarea_group_item:nth-child(3) {
+#page-totara-catalog-index .tw-catalog .tw-catalogItemNarrow__textarea_group_item:nth-child(3) {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
@@ -5177,34 +5177,34 @@ div:has(> #region-main) > #block-region-side-post {
    NOTA: No se toca display/flex/grid de Totara, solo estilos visuales
    ============================================================ */
 
-.tw-catalog__aside {
+#page-totara-catalog-index .tw-catalog__aside {
   padding-right: 0px !important;
 }
 
-.tw-selectRegionPanel {
+#page-totara-catalog-index .tw-selectRegionPanel {
   padding: 8px;
 }
 
-.tw-selectRegionPanel__selector > div {
+#page-totara-catalog-index .tw-selectRegionPanel__selector > div {
   margin-left: 0px !important;
 }
 
-.tw-selectRegionPanel__heading_text {
+#page-totara-catalog-index .tw-selectRegionPanel__heading_text {
   padding-top: 4px !important;
 }
 
-.tw-selectRegionPrimary__selector:last-of-type {
+#page-totara-catalog-index .tw-selectRegionPrimary__selector:last-of-type {
   align-content: center !important;
 }
 
-.tw-selectRegionPrimary .tw-catalogResultsCount {
+#page-totara-catalog-index .tw-selectRegionPrimary .tw-catalogResultsCount {
   margin: auto 26px auto auto;
   font-size: 16px;
   font-weight: 500;
   padding-top: 5px;
 }
 
-.tw-catalogItemNarrow__progress {
+#page-totara-catalog-index .tw-catalogItemNarrow__progress {
   display: none !important;
 }
 
@@ -5558,11 +5558,11 @@ div:has(> #region-main) > #block-region-side-post {
 }
 
 /* ── Vista Wide: altura contenedor y título ──────────────────── */
-.tw-catalogItemWide__content_left {
+#page-totara-catalog-index .tw-catalogItemWide__content_left {
     height: 150px;
 }
 
-.tw-catalogItemWide__ellipsis {
+#page-totara-catalog-index .tw-catalogItemWide__ellipsis {
     padding: 2px 30px 10px 20px;
     font-size: 18px;
     color: var(--color-title-catalog-box);
