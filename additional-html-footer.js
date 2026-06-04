@@ -3529,3 +3529,20 @@ table.appendChild(tfoot);
         schedule();
     }
 })();
+
+// ── Hero inst223: forzar recálculo de slick tras fijar ancho ──────────────
+(function () {
+    if (!document.getElementById('inst223')) return;
+
+    function recalcSlick() {
+        if (window.jQuery) {
+            jQuery(window).trigger('resize');
+        }
+    }
+
+    if (document.readyState === 'complete') {
+        setTimeout(recalcSlick, 200);
+    } else {
+        window.addEventListener('load', function () { setTimeout(recalcSlick, 200); });
+    }
+})();

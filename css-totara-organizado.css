@@ -530,6 +530,22 @@ a[href*="/message/edit.php"] {
   max-width: 420px;
 }
 
+/* ── Hero principal: ancho completo ──────────────────────────── */
+.has-full-page-slider #page.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.has-full-page-slider #region-top.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.has-full-page-slider #block-region-top {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 
 .hero-principal .btn-banner,
 .vimeo-trigger-btn {
