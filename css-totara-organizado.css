@@ -5770,7 +5770,7 @@ div:has(> #region-main) > #block-region-side-post {
    Si no hay imagen, el marco queda en color corporativo. */
 .exp-card__image {
   position: relative;
-  height: 200px;
+  height: 280px;
   overflow: hidden;
   background: #ffffff;
   flex-shrink: 0;
