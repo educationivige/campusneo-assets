@@ -3453,6 +3453,122 @@ table.appendChild(tfoot);
 
 
 /* ============================================================
+   PNT — Imágenes por keyword FUERA del catálogo
+   (cabecera de curso, tarjetas del expediente, ...)
+
+   - Recorre los contextos de CONTEXTS y solo actúa si la imagen es el
+     genérico de PNT (la URL contiene "imagen-pnt") o el título contiene
+     "PNT" → nunca cambia la imagen de cursos que no son PNT.
+   - Sustituye la imagen genérica por la específica según las keywords
+     del título (misma tabla que el catálogo / pnts/images.json). Si el
+     título no coincide con ninguna keyword, deja la imagen tal cual.
+   - El catálogo NO se toca aquí (sus contenedores .tw-catalogItem* no
+     están en CONTEXTS); lo gestiona el módulo de imágenes del catálogo.
+   - Para añadir otro sitio, añade { container, image, title } a CONTEXTS.
+   ============================================================ */
+(function () {
+    'use strict';
+
+    const DEBUG = false;
+    function log(m, d) { if (DEBUG) console.log('[PNT img] ' + m, d || ''); }
+
+    // Imágenes por keyword del título — sincronizar con pnts/images.json
+    const PNT_CATEGORIAS = [
+        { keywords: ['ohss', 'ovarian'],                          imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/clinica.png' },
+        { keywords: ['serology', 'serolog', 'consent'],           imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/serologia.png' },
+        { keywords: ['adenomios'],                                imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/clinica.png' },
+        { keywords: ['vitrif', 'desvitrif'],                      imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/vitrificacion.png' },
+        { keywords: ['laborator', 'lab', 'nota técnica', 'parada'], imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/laboratorio.png' },
+        { keywords: ['visita', 'infertil'],                       imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/infertilidad.png' },
+        { keywords: ['biovigilancia', 'biovigilance'],            imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/biovigilancia.png' },
+        { keywords: ['embrion', 'embryo', 'thaw'],                imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/embrion.png' },
+        { keywords: ['trazabilidad', 'muestras', 'biológic'],     imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/trazabilidad.png' },
+        { keywords: ['alerta', 'seguridad', 'geneseeker'],        imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/seguridad.png' },
+        { keywords: ['documentac', 'gestión', 'clínica'],         imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/documentacion.png' },
+        { keywords: ['genetic', 'genétic'],                       imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/genetica.png' },
+        { keywords: ['standard', 'estándar', 'sop', 'pnt'],       imagen: 'https://ivirmacampus.com/pluginfile.php/1/local_uploadfiles/additionalimages/0/laboratorio.png' }
+    ];
+
+    // Solo "mejoramos" imágenes genéricas de PNT; el resto no se toca
+    const GENERIC_RX = /imagen-pnt/i;
+
+    // Contextos (fuera del catálogo) donde aparecen los PNT
+    const CONTEXTS = [
+        { container: '.ascabecerainner', image: '.asimage',     title: '.ascoursetitle' },
+        { container: '.exp-card',        image: '.exp-card__bg', title: '.exp-card__overlay-title' }
+    ];
+
+    function resolveImage(title) {
+        const lower = (title || '').toLowerCase();
+        const m = PNT_CATEGORIAS.find(c =>
+            c.keywords.some(k => lower.includes(k.toLowerCase())));
+        return m ? m.imagen : null; // null → no hay keyword: dejar la imagen actual
+    }
+
+    function currentBg(el) {
+        const s = el.style.backgroundImage || '';
+        const m = s.match(/url\(["']?([^"')]+)["']?\)/);
+        return m ? m[1] : '';
+    }
+
+    function isPntTitle(t) { return (t || '').toUpperCase().includes('PNT'); }
+
+    function processContainer(container, ctx) {
+        const imgEl   = container.querySelector(ctx.image);
+        const titleEl = container.querySelector(ctx.title);
+        if (!imgEl || !titleEl) return;
+
+        const title = (titleEl.textContent || '').trim();
+        const bg    = currentBg(imgEl);
+
+        // Disparador: imagen genérica de PNT o título con "PNT"
+        if (!GENERIC_RX.test(bg) && !isPntTitle(title)) return;
+
+        const nueva = resolveImage(title);
+        if (!nueva) return;                              // sin keyword → dejar la genérica
+        const newBg = "url('" + nueva + "')";
+        if (imgEl.style.backgroundImage === newBg) return; // ya aplicada (evita bucle)
+
+        imgEl.style.backgroundImage = newBg;
+        imgEl.setAttribute('data-pnt-img', '1');
+        log('Imagen aplicada', title + ' → ' + nueva);
+    }
+
+    function scan() {
+        CONTEXTS.forEach(ctx => {
+            document.querySelectorAll(ctx.container)
+                .forEach(c => processContainer(c, ctx));
+        });
+    }
+
+    // El expediente pinta el fondo de forma asíncrona (fetch), así que
+    // observamos el DOM (debounced) y reintentamos unas cuantas veces.
+    let pending = false;
+    function scheduleScan() {
+        if (pending) return;
+        pending = true;
+        setTimeout(function () { pending = false; scan(); }, 150);
+    }
+
+    function init() {
+        scan();
+        const obs = new MutationObserver(scheduleScan);
+        obs.observe(document.body, {
+            childList: true, subtree: true,
+            attributes: true, attributeFilter: ['style']
+        });
+        [400, 1000, 2000, 3500].forEach(ms => setTimeout(scan, ms));
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+
+/* ============================================================
    CATÁLOGO — Filtros colapsables con apertura por defecto
    Los headers (h3) de los filtros no tienen toggle nativo en Totara.
    Este script añade el comportamiento: abiertos por defecto,
