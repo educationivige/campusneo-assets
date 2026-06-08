@@ -5686,34 +5686,170 @@ div:has(> #region-main) > #block-region-side-post {
   color: #374151;
 }
 
-/* Fecha de finalización — verde suave */
+/* Finalizado — verde suave */
 .exp-badge--end {
   background: #e6f4ea;
   color: #1e7e34;
 }
 
-/* Relleno corporativo cuando el curso no tiene imagen */
-.exp-cyber-card .cyber-card__bg {
-  background-color: var(--color-primary, #0F6C72);
+/* En curso / pendiente — gris suave */
+.exp-badge--pending {
+  background: #eef2f4;
+  color: #6b7280;
 }
 
-/* Más altura de imagen para que no se corten los títulos */
-.exp-cyber-card .cyber-card__image {
+/* Barra de progreso al pie de la card */
+.exp-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.exp-progress__track {
+  flex: 1;
+  height: 7px;
+  background: #e6ebed;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.exp-progress__fill {
+  height: 100%;
+  background: var(--color-primary, #006975);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.exp-progress__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-primary, #006975);
+  white-space: nowrap;
+}
+
+/* Completado: barra y texto en verde */
+.exp-progress--done .exp-progress__fill { background: #1e7e34; }
+.exp-progress--done .exp-progress__label { color: #1e7e34; }
+
+/* Pantallas grandes: 4 columnas.
+   Acotado a #exp-grid para no afectar al grid de one-tech. */
+@media (min-width: 1800px) {
+  #exp-grid.cyber-standalone__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* --- Card del expediente (autónoma, no depende de .cyber-card) --- */
+.exp-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #ffffff;
+  border-radius: 15px;
+  border: 0.5px solid rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exp-card:hover {
+  border-color: var(--color-primary, #006975);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 105, 117, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Imagen: alineada arriba, con padding (marco) y sin blur.
+   Si no hay imagen, el marco queda en color corporativo. */
+.exp-card__image {
+  position: relative;
   height: 200px;
+  overflow: hidden;
+  background: #ffffff;
+  flex-shrink: 0;
 }
 
-/* Overlay superpuesto en verde corporativo (en vez del azul one-tech) */
-.exp-cyber-card .cyber-card__image::after {
+.exp-card__bg {
+  position: absolute;
+  inset: 12px;
+  border-radius: 10px;
+  background-color: var(--color-primary, #0F6C72);
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* Overlay verde corporativo, ajustado al marco de la imagen */
+.exp-card__image::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 10px;
   background: linear-gradient(180deg,
     rgba(0, 105, 117, 0.15) 0%,
     rgba(0, 105, 117, 0.80) 100%);
+  z-index: 1;
 }
 
-/* Título más pequeño (sin reservar hueco para el badge "Próximamente") */
-.exp-cyber-card .cyber-card__overlay-title {
-  font-size: 15px;
-  padding-right: 0;
+/* Título sobre la imagen */
+.exp-card__overlay {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+  z-index: 2;
+  pointer-events: none;
 }
+
+.exp-card__overlay-title {
+  display: block;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 10px;
+}
+
+/* Cuerpo de la card */
+.exp-card__body {
+  padding: 16px 18px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ffffff;
+}
+
+/* Estado (Finalizado / En curso) en la esquina superior de la imagen */
+.exp-status {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  white-space: nowrap;
+}
+
+.exp-status i { font-size: 11px; }
+.exp-status--done { background: #1e7e34; color: #ffffff; }
+.exp-status--pending { background: #ffffff; color: var(--color-primary, #006975); }
 
 /* Aviso "sin formaciones" con el estilo one-tech pero en color corporativo */
 .dai-empty-notice--corp {

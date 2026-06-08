@@ -1,11 +1,11 @@
 <!-- ============================================================
-     EXPEDIENTE — Cursos como cards (estilo one-tech / cyber-card)
+     EXPEDIENTE — Cursos como cards (.exp-card, estilo one-tech)
 
      Qué hace:
      - Lee las tablas de reportbuilder del Expediente: "Formación finalizada"
        (inst8148) y "Formación en curso" (inst8154).
      - Construye un selector de tabs (.dai-filters) entre ambas secciones.
-     - Por cada curso genera una cyber-card con la imagen del curso (fetch a la
+     - Por cada curso genera una .exp-card con la imagen del curso (fetch a la
        página del curso, .asimage), título en overlay y badges de Tipo de curso,
        Fecha de inscripción y Fecha de finalización.
      - Si una sección no tiene cursos, muestra un aviso one-tech en color
@@ -13,7 +13,7 @@
 
      Estilos: reutiliza los globales de css-totara-organizado.css
      (.dai-wrap, .dai-filters, .dai-filter-btn, .cyber-standalone__grid,
-      .cyber-card*, .dai-empty-notice + variante --corp, .exp-badge*).
+      .dai-empty-notice + variante --corp). Cards propias: .exp-card*, .exp-badge*.
      ============================================================ -->
 <script>
 (function () {
@@ -48,8 +48,41 @@
         return (cell.textContent || '').replace(/\u00a0/g, ' ').trim();
     }
 
+    // Fecha de completado del curso: prueba varias columnas del informe
+    // (la de "Fecha de finalización del curso" primero) y cae a course_enddate.
+    function completionDate(row) {
+        const candidates = [
+            'course_completion_completeddate',
+            'course_completion_timecompleted',
+            'course_completion_datefinished',
+            'course_enddate'
+        ];
+        for (let i = 0; i < candidates.length; i++) {
+            const t = cellText(row, candidates[i]);
+            if (t && t !== '-') return t;
+        }
+        return '';
+    }
+
+    // Lee el % de progreso de la celda course_completion_progresspercent
+    function extractProgress(row) {
+        const cell = row.querySelector('td.course_completion_progresspercent');
+        if (!cell) return null;
+        const bar = cell.querySelector('.bar[aria-valuenow]');
+        if (bar) {
+            const v = parseInt(bar.getAttribute('aria-valuenow'), 10);
+            if (!isNaN(v)) return v;
+        }
+        const txt = cell.querySelector('.progressbar__text');
+        if (txt) {
+            const m = (txt.textContent || '').match(/(\d+)/);
+            if (m) return parseInt(m[1], 10);
+        }
+        return null;
+    }
+
     // Devuelve la lista de cursos de un bloque, o null si el bloque no existe
-    function extractCourses(blockId) {
+    function extractCourses(blockId, sectionKey) {
         const block = document.getElementById(blockId);
         if (!block) return null;
         const table = block.querySelector('table.reportbuilder-table');
@@ -59,12 +92,17 @@
         table.querySelectorAll('tbody > tr').forEach(row => {
             const link = row.querySelector('td.course_courselink a');
             if (!link) return;
+            let progress = extractProgress(row);
+            // Los cursos de "Formación finalizada" están completados → 100%
+            if (sectionKey === 'finalizada') progress = 100;
+            if (progress === null) progress = 0;
             courses.push({
                 url:          link.getAttribute('href') || '#',
                 titulo:       (link.textContent || '').trim(),
                 tipo:         cellText(row, 'course_category_name'),
                 inscripcion:  cellText(row, 'course_completion_enrolleddate'),
-                finalizacion: cellText(row, 'course_enddate'),
+                finalizacion: completionDate(row),
+                progress:     progress,
                 imagen:       ''
             });
         });
@@ -106,30 +144,49 @@
 
     function buildCard(course) {
         const card = document.createElement('a');
-        card.className = 'cyber-card exp-cyber-card';
+        card.className = 'exp-card';
         card.href = course.url;
         card.target = '_blank';
         card.rel = 'noopener';
+
+        const completed = course.progress >= 100;
 
         const badges = [];
         if (course.tipo) badges.push(badge('type', 'fa-regular fa-folder-open', course.tipo));
         badges.push(badge('enrol', 'fa-regular fa-calendar-plus',
             'Inscripción: ' + (course.inscripcion || '—')));
-        badges.push(badge('end', 'fa-regular fa-calendar-check',
-            'Finalización: ' + (course.finalizacion || 'Pendiente')));
+
+        // Estado en la esquina superior de la imagen (Finalizado / En curso)
+        const statusIcon = completed ? 'fa-regular fa-circle-check' : 'fa-regular fa-clock';
+        const statusText = completed
+            ? ('Finalizado' + (course.finalizacion ? ': ' + course.finalizacion : ''))
+            : 'En curso';
+        const statusBadge =
+            '<span class="exp-status exp-status--' + (completed ? 'done' : 'pending') + '">' +
+                '<i class="' + statusIcon + '"></i> ' + escapeHtml(statusText) +
+            '</span>';
 
         const bgStyle = course.imagen
             ? ' style="background-image:url(\'' + course.imagen + '\')"' : '';
 
+        const progressLabel = course.progress + '%';
+
         card.innerHTML =
-            '<div class="cyber-card__image">' +
-                '<div class="cyber-card__bg"' + bgStyle + '></div>' +
-                '<div class="cyber-card__overlay">' +
-                    '<strong class="cyber-card__overlay-title">' + escapeHtml(course.titulo) + '</strong>' +
+            '<div class="exp-card__image">' +
+                '<div class="exp-card__bg"' + bgStyle + '></div>' +
+                statusBadge +
+                '<div class="exp-card__overlay">' +
+                    '<strong class="exp-card__overlay-title">' + escapeHtml(course.titulo) + '</strong>' +
                 '</div>' +
             '</div>' +
-            '<div class="cyber-card__body">' +
+            '<div class="exp-card__body">' +
                 '<div class="exp-badges">' + badges.join('') + '</div>' +
+                '<div class="exp-progress' + (completed ? ' exp-progress--done' : '') + '">' +
+                    '<div class="exp-progress__track">' +
+                        '<div class="exp-progress__fill" style="width:' + course.progress + '%"></div>' +
+                    '</div>' +
+                    '<span class="exp-progress__label">' + progressLabel + '</span>' +
+                '</div>' +
             '</div>';
 
         return card;
@@ -160,7 +217,7 @@
             // Imagen progresiva: se rellena el fondo cuando resuelve el fetch
             fetchCourseImage(course.url).then(img => {
                 if (!img) return;
-                const bg = card.querySelector('.cyber-card__bg');
+                const bg = card.querySelector('.exp-card__bg');
                 if (bg) bg.style.backgroundImage = "url('" + img + "')";
             });
         });
@@ -180,7 +237,7 @@
             key:   s.key,
             label: blockLabel(s.blockId, s.label),
             blockId: s.blockId,
-            courses: extractCourses(s.blockId)
+            courses: extractCourses(s.blockId, s.key)
         }));
 
         const present = data.filter(d => d.courses !== null);
