@@ -123,9 +123,41 @@
         if (img) renderThumb(url, img);
     }
 
+    // Aviso "sin certificados" con el mismo estilo corporativo que el expediente
+    function emptyNoticeHtml() {
+        return '<div class="dai-empty-notice dai-empty-notice--corp cert-empty-notice">' +
+                   '<span class="dai-empty-notice__icon">' +
+                       '<i class="fa fa-info-circle" aria-hidden="true"></i>' +
+                   '</span>' +
+                   'No hay certificados disponibles para mostrar.' +
+               '</div>';
+    }
+
+    function showEmptyNotice(block) {
+        const content = block.querySelector('.content.block-content') || block;
+        if (content.querySelector('.cert-empty-notice')) return; // ya inyectado
+        // Oculta el mensaje vacío por defecto de Totara (sin estilo) para que
+        // solo quede el nuestro: ocultamos elementos y vaciamos texto suelto.
+        Array.from(content.childNodes).forEach(function (node) {
+            if (node.nodeType === 1) {
+                node.style.display = 'none';
+            } else if (node.nodeType === 3 && node.textContent.trim()) {
+                node.textContent = '';
+            }
+        });
+        content.insertAdjacentHTML('beforeend', emptyNoticeHtml());
+    }
+
     function init() {
-        const items = document.querySelectorAll('.block_mycertificates .certificateitem');
-        if (!items.length) { log('No hay certificados en esta página, omitiendo'); return; }
+        const block = document.querySelector('.block_mycertificates');
+        if (!block) { log('No hay bloque de certificados en esta página, omitiendo'); return; }
+
+        const items = block.querySelectorAll('.certificateitem');
+        if (!items.length) {
+            log('Bloque sin certificados; mostrando aviso');
+            showEmptyNotice(block);
+            return;
+        }
         log(items.length + ' certificado(s) encontrados');
         items.forEach(enhanceItem);
     }

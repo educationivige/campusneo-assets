@@ -179,9 +179,38 @@
         log('Gráfico repintado (' + segments.length + ' estados, total ' + total + ')');
     }
 
-    // Arranca en cuanto el DOM está listo (sin espera fija) + reintento de
-    // seguridad por si algún bloque se renderiza algo más tarde (init es idempotente)
-    function boot() { init(); setTimeout(init, 600); }
+    // ¿Están ya repintados todos los gráficos de la página?
+    function allDone() {
+        const charts = document.querySelectorAll('.block_totara_report_graph__chart');
+        return charts.length > 0 &&
+            Array.prototype.every.call(charts, c => c.querySelector('.status-chart'));
+    }
+
+    // Chart.js inserta el <canvas data-report-options> de forma asíncrona (y en
+    // frío tarda más), así que no basta con un retardo fijo: procesamos lo que
+    // haya ya y, si falta, observamos el DOM + reintentos acotados hasta que el
+    // canvas aparezca. init()/processChart son idempotentes.
+    function boot() {
+        init();
+        if (allDone()) return;
+
+        const target = document.getElementById('region-main') || document.body;
+        const obs = new MutationObserver(function () {
+            init();
+            if (allDone()) obs.disconnect();
+        });
+        obs.observe(target, { childList: true, subtree: true });
+
+        let tries = 0;
+        const timer = setInterval(function () {
+            init();
+            if (allDone() || ++tries >= 20) { // ~10s máximo
+                clearInterval(timer);
+                obs.disconnect();
+            }
+        }, 500);
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', boot);
     } else {

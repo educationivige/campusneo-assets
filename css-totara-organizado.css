@@ -5733,6 +5733,10 @@ div:has(> #region-main) > #block-region-side-post {
 .exp-progress--done .exp-progress__fill { background: #1e7e34; }
 .exp-progress--done .exp-progress__label { color: #1e7e34; }
 
+/* No superada: barra y texto en rojo */
+.exp-progress--failed .exp-progress__fill { background: #c0392b; }
+.exp-progress--failed .exp-progress__label { color: #c0392b; }
+
 /* Pantallas grandes: 4 columnas.
    Acotado a #exp-grid para no afectar al grid de one-tech. */
 @media (min-width: 1800px) {
@@ -5850,6 +5854,7 @@ div:has(> #region-main) > #block-region-side-post {
 .exp-status i { font-size: 11px; }
 .exp-status--done { background: #1e7e34; color: #ffffff; }
 .exp-status--pending { background: #ffffff; color: var(--color-primary, #006975); }
+.exp-status--failed { background: #c0392b; color: #ffffff; }
 
 /* Aviso "sin formaciones" con el estilo one-tech pero en color corporativo */
 .dai-empty-notice--corp {

@@ -22,8 +22,9 @@
     const CONFIG = {
         // Bloques de informe del Expediente (en orden de aparición)
         sections: [
-            { key: 'finalizada', blockId: 'inst8148', label: 'Formación finalizada' },
-            { key: 'encurso',    blockId: 'inst8154', label: 'Formación en curso' }
+            { key: 'finalizada',  blockId: 'inst8148',  label: 'Formación finalizada' },
+            { key: 'encurso',     blockId: 'inst8154',  label: 'Formación en curso' },
+            { key: 'nosuperada',  blockId: 'inst11363', label: 'Formación no superada' }
         ],
         debug: true
     };
@@ -103,6 +104,7 @@
                 inscripcion:  cellText(row, 'course_completion_enrolleddate'),
                 finalizacion: completionDate(row),
                 progress:     progress,
+                failed:       sectionKey === 'nosuperada',
                 imagen:       ''
             });
         });
@@ -149,20 +151,31 @@
         card.target = '_blank';
         card.rel = 'noopener';
 
-        const completed = course.progress >= 100;
+        const failed = course.failed === true;
+        const completed = !failed && course.progress >= 100;
 
         const badges = [];
         if (course.tipo) badges.push(badge('type', 'fa-regular fa-folder-open', course.tipo));
         badges.push(badge('enrol', 'fa-regular fa-calendar-plus',
             'Inscripción: ' + (course.inscripcion || '—')));
 
-        // Estado en la esquina superior de la imagen (Finalizado / En curso)
-        const statusIcon = completed ? 'fa-regular fa-circle-check' : 'fa-regular fa-clock';
-        const statusText = completed
-            ? ('Finalizado' + (course.finalizacion ? ': ' + course.finalizacion : ''))
-            : 'En curso';
+        // Estado en la esquina superior de la imagen (Finalizado / En curso / No superada)
+        let statusVariant, statusIcon, statusText;
+        if (failed) {
+            statusVariant = 'failed';
+            statusIcon = 'fa-regular fa-circle-xmark';
+            statusText = 'No superada';
+        } else if (completed) {
+            statusVariant = 'done';
+            statusIcon = 'fa-regular fa-circle-check';
+            statusText = 'Finalizado' + (course.finalizacion ? ': ' + course.finalizacion : '');
+        } else {
+            statusVariant = 'pending';
+            statusIcon = 'fa-regular fa-clock';
+            statusText = 'En curso';
+        }
         const statusBadge =
-            '<span class="exp-status exp-status--' + (completed ? 'done' : 'pending') + '">' +
+            '<span class="exp-status exp-status--' + statusVariant + '">' +
                 '<i class="' + statusIcon + '"></i> ' + escapeHtml(statusText) +
             '</span>';
 
@@ -181,7 +194,7 @@
             '</div>' +
             '<div class="exp-card__body">' +
                 '<div class="exp-badges">' + badges.join('') + '</div>' +
-                '<div class="exp-progress' + (completed ? ' exp-progress--done' : '') + '">' +
+                '<div class="exp-progress' + (completed ? ' exp-progress--done' : (failed ? ' exp-progress--failed' : '')) + '">' +
                     '<div class="exp-progress__track">' +
                         '<div class="exp-progress__fill" style="width:' + course.progress + '%"></div>' +
                     '</div>' +
