@@ -1,0 +1,188 @@
+<!-- ============================================================
+     ESTADO DE MIS CURSOS — gráfico donut + leyenda (.status-*)
+
+     Pegar este bloque en el campo "Additional HTML footer" de Totara.
+
+     Qué hace:
+     - Lee el bloque inst8161 (block_totara_report_graph "Estado de mis cursos").
+     - Toma el JSON del canvas de Chart.js (data-report-options) y repinta los
+       datos como un donut (conic-gradient CSS) + leyenda corporativa, ocultando
+       el gráfico original.
+
+     Estilos: .status-* en css-totara-organizado.css
+     ============================================================ -->
+<script>
+(function () {
+    'use strict';
+
+    const CONFIG = {
+        debug: true
+    };
+
+    function log(message, data) {
+        if (CONFIG.debug) console.log('[Estado cursos] ' + message, data || '');
+    }
+
+    function escapeHtml(s) {
+        return (s || '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Colores por estado. El informe da el mismo color a todos los estados, así
+    // que asignamos uno propio: por palabra clave (ES) y, si no, por la paleta.
+    const PALETTE = ['#c4ccce', '#00B4BE', '#1e7e34', '#F18D7E', '#6C5CE7', '#FDB022'];
+    const COLOR_MAP = {
+        'completado': '#1e7e34', 'completados': '#1e7e34', 'finalizado': '#1e7e34',
+        'en curso': '#00B4BE', 'en progreso': '#00B4BE',
+        'aún no comenzado': '#c4ccce', 'no comenzado': '#c4ccce', 'no iniciado': '#c4ccce'
+    };
+    function colorFor(label, index) {
+        return COLOR_MAP[label.toLowerCase()] || PALETTE[index % PALETTE.length];
+    }
+
+    // Procesa todos los gráficos de la página (puede haber más de un donut)
+    function init() {
+        const charts = document.querySelectorAll('.block_totara_report_graph__chart');
+        if (!charts.length) { log('No hay gráficos en esta página, omitiendo'); return; }
+        charts.forEach(processChart);
+    }
+
+    function processChart(chartWrap) {
+        if (chartWrap.querySelector('.status-chart')) return;
+
+        // Un bloque puede tener varios canvas (un doughnut "progress" por estado:
+        // data[0] = nº de ese estado, data[1] = resto sin etiqueta). Recogemos de
+        // todos los canvas los puntos con etiqueta no vacía → estados reales.
+        const canvases = chartWrap.querySelectorAll('canvas[data-report-options]');
+        if (!canvases.length) { log('Sin canvas con data-report-options'); return; }
+
+        const segments = [];
+        canvases.forEach(canvas => {
+            let opts;
+            try {
+                opts = JSON.parse(canvas.getAttribute('data-report-options'));
+            } catch (e) {
+                log('No se pudo parsear data-report-options', e);
+                return;
+            }
+            const type = (opts.type || '').toLowerCase();
+            if (type && type !== 'doughnut' && type !== 'pie') return;
+            const ds = opts.data && opts.data.datasets && opts.data.datasets[0];
+            if (!ds) return;
+            const labels = opts.data.labels || [];
+            const values = ds.data || [];
+            for (let i = 0; i < values.length; i++) {
+                const label = (labels[i] || '').trim();
+                if (!label) continue;   // omite el "resto" del progress (sin etiqueta)
+                segments.push({
+                    label: label,
+                    value: Number(values[i]) || 0,
+                    color: colorFor(label, segments.length)
+                });
+            }
+        });
+        if (segments.length === 0) return;
+        const sum = segments.reduce((acc, s) => acc + s.value, 0);
+        const total = sum;
+
+        // Gradiente cónico del anillo
+        let acc = 0;
+        const stops = segments.map(s => {
+            const start = sum ? (acc / sum) * 100 : 0;
+            acc += s.value;
+            const end = sum ? (acc / sum) * 100 : 0;
+            return s.color + ' ' + start + '% ' + end + '%';
+        });
+        const gradient = 'conic-gradient(' + stops.join(', ') + ')';
+
+        // Tabla descriptiva
+        const rows = segments.map(s => {
+            const pct = sum ? Math.round((s.value / sum) * 100) : 0;
+            return '<tr class="status-chart__row">' +
+                '<td class="status-chart__cell status-chart__cell--estado">' +
+                    '<span class="status-chart__dot" style="background:' + s.color + '"></span>' +
+                    escapeHtml(s.label) +
+                '</td>' +
+                '<td class="status-chart__cell status-chart__cell--num">' + s.value + '</td>' +
+                '<td class="status-chart__cell status-chart__cell--pct">' + pct + '%</td>' +
+            '</tr>';
+        }).join('');
+
+        const widget = document.createElement('div');
+        widget.className = 'status-chart';
+        widget.innerHTML =
+            '<div class="status-chart__donut" style="background:' + gradient + '">' +
+                '<div class="status-chart__center">' +
+                    '<span class="status-chart__total">' + total + '</span>' +
+                    '<span class="status-chart__total-label">cursos</span>' +
+                '</div>' +
+            '</div>' +
+            '<div class="status-chart__panel">' +
+                '<table class="status-chart__table">' +
+                    '<thead><tr>' +
+                        '<th class="status-chart__th">Estado</th>' +
+                        '<th class="status-chart__th status-chart__th--num">Nº de cursos</th>' +
+                        '<th class="status-chart__th status-chart__th--num">%</th>' +
+                    '</tr></thead>' +
+                    '<tbody>' + rows + '</tbody>' +
+                    '<tfoot><tr class="status-chart__row status-chart__foot">' +
+                        '<td class="status-chart__cell">Total</td>' +
+                        '<td class="status-chart__cell status-chart__cell--num">' + total + '</td>' +
+                        '<td class="status-chart__cell status-chart__cell--pct">100%</td>' +
+                    '</tr></tfoot>' +
+                '</table>' +
+            '</div>';
+
+        const rbchart = chartWrap.querySelector('.rb-chartjs');
+        if (rbchart) rbchart.style.display = 'none';
+        chartWrap.appendChild(widget);
+
+        // Tooltip por segmento: detecta el segmento según el ángulo del cursor
+        const donut = widget.querySelector('.status-chart__donut');
+        const tip = document.createElement('div');
+        tip.className = 'status-chart__tip';
+        tip.style.display = 'none';
+        donut.appendChild(tip);
+
+        let cum = 0;
+        const ranges = segments.map(s => {
+            const start = cum;
+            cum += sum ? (s.value / sum) * 100 : 0;
+            return { start: start, end: cum, seg: s };
+        });
+
+        donut.addEventListener('mousemove', function (e) {
+            const rect = donut.getBoundingClientRect();
+            const r = rect.width / 2;
+            const dx = e.clientX - (rect.left + r);
+            const dy = e.clientY - (rect.top + r);
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            // Solo dentro del anillo (fuera del agujero central de 28px)
+            if (dist > r || dist < r - 28) { tip.style.display = 'none'; return; }
+            // Ángulo desde arriba, en sentido horario (como el conic-gradient)
+            let ang = Math.atan2(dx, -dy) * 180 / Math.PI;
+            if (ang < 0) ang += 360;
+            const p = ang / 3.6; // 0..100
+            const hit = ranges.find(rg => p >= rg.start && p < rg.end) || ranges[ranges.length - 1];
+            const s = hit.seg;
+            const pct = sum ? Math.round((s.value / sum) * 100) : 0;
+            tip.innerHTML =
+                '<span class="status-chart__tip-dot" style="background:' + s.color + '"></span>' +
+                escapeHtml(s.label) + ': <strong>' + s.value + '</strong> (' + pct + '%)';
+            tip.style.left = (e.clientX - rect.left) + 'px';
+            tip.style.top = (e.clientY - rect.top) + 'px';
+            tip.style.display = 'block';
+        });
+        donut.addEventListener('mouseleave', function () { tip.style.display = 'none'; });
+
+        log('Gráfico repintado (' + segments.length + ' estados, total ' + total + ')');
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(init, 300));
+    } else {
+        setTimeout(init, 300);
+    }
+})();
+</script>
