@@ -179,10 +179,13 @@
         log('Gráfico repintado (' + segments.length + ' estados, total ' + total + ')');
     }
 
+    // Arranca en cuanto el DOM está listo (sin espera fija) + reintento de
+    // seguridad por si algún bloque se renderiza algo más tarde (init es idempotente)
+    function boot() { init(); setTimeout(init, 600); }
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => setTimeout(init, 300));
+        document.addEventListener('DOMContentLoaded', boot);
     } else {
-        setTimeout(init, 300);
+        boot();
     }
 })();
 </script>

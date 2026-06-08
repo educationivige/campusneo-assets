@@ -1,0 +1,142 @@
+<!-- ============================================================
+     MIS CERTIFICADOS — miniatura real + botones Ver / Descargar (.cert-*)
+
+     Pegar este bloque en el campo "Additional HTML footer" de Totara.
+
+     Qué hace (sobre el bloque block_mycertificates):
+     - Botón "Ver": abre el certificado en una pestaña nueva.
+     - Botón "Descargar": descarga el PDF con el nombre Certificado-Campus.pdf.
+     - Miniatura: renderiza la 1ª página del PDF con pdf.js y sustituye el
+       certificado.svg. Si la respuesta no es un PDF, conserva el placeholder.
+
+     Fuente del PDF: el href original del item (blocks/mycertificates/customview.php),
+     que es la URL que ya muestra el certificado al pulsar "Ver".
+
+     Estilos: .cert-* en css-totara-organizado.css
+     ============================================================ -->
+<script>
+(function () {
+    'use strict';
+
+    const CONFIG = {
+        pdfWorker: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js',
+        thumbWidth: 320,
+        downloadName: 'Certificado-Campus.pdf',
+        debug: true
+    };
+
+    function log(message, data) {
+        if (CONFIG.debug) console.log('[Mis certificados] ' + message, data || '');
+    }
+
+    const blobCache = {};
+    // Descarga el PDF como blob (cacheado) y valida que sea un PDF
+    function fetchPdfBlob(url) {
+        if (!blobCache[url]) {
+            blobCache[url] = fetch(url, { credentials: 'same-origin' }).then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                const ct = r.headers.get('content-type') || '';
+                if (ct.indexOf('pdf') === -1) throw new Error('No es PDF (' + ct + ')');
+                return r.blob();
+            });
+        }
+        return blobCache[url];
+    }
+
+    // Miniatura: renderiza la 1ª página del PDF con pdf.js
+    function renderThumb(url, img) {
+        if (!window.pdfjsLib) { log('pdf.js no disponible; se conserva el placeholder'); return; }
+        try { pdfjsLib.GlobalWorkerOptions.workerSrc = CONFIG.pdfWorker; } catch (e) { /* noop */ }
+
+        fetchPdfBlob(url)
+            .then(function (blob) { return blob.arrayBuffer(); })
+            .then(function (buf) { return pdfjsLib.getDocument({ data: buf }).promise; })
+            .then(function (pdf) { return pdf.getPage(1); })
+            .then(function (page) {
+                const base = page.getViewport({ scale: 1 });
+                const scale = (CONFIG.thumbWidth / base.width) * (window.devicePixelRatio || 1);
+                const vp = page.getViewport({ scale: scale });
+                const canvas = document.createElement('canvas');
+                canvas.width = vp.width;
+                canvas.height = vp.height;
+                return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise
+                    .then(function () {
+                        img.src = canvas.toDataURL('image/png');
+                        img.classList.add('cert-thumb--real');
+                    });
+            })
+            .catch(function (err) { log('No se pudo renderizar la miniatura', err); });
+    }
+
+    // Descarga forzada con nombre fijo; si no es PDF, abre la URL como respaldo
+    function downloadPdf(url) {
+        fetchPdfBlob(url)
+            .then(function (blob) {
+                const obj = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = obj;
+                a.download = CONFIG.downloadName;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                setTimeout(function () { URL.revokeObjectURL(obj); }, 5000);
+            })
+            .catch(function (err) {
+                log('No se pudo descargar como blob, abro la URL', err);
+                window.open(url, '_blank');
+            });
+    }
+
+    function buildActions(url) {
+        const wrap = document.createElement('div');
+        wrap.className = 'cert-actions';
+
+        const view = document.createElement('a');
+        view.className = 'cert-btn cert-btn--view';
+        view.href = url;
+        view.target = '_blank';
+        view.rel = 'noopener';
+        view.innerHTML = '<i class="fa-regular fa-eye"></i> Ver';
+
+        const down = document.createElement('button');
+        down.type = 'button';
+        down.className = 'cert-btn cert-btn--download';
+        down.innerHTML = '<i class="fa-solid fa-download"></i> Descargar';
+        down.addEventListener('click', function () { downloadPdf(url); });
+
+        wrap.appendChild(view);
+        wrap.appendChild(down);
+        return wrap;
+    }
+
+    function enhanceItem(item) {
+        if (item.dataset.certDone) return;
+        item.dataset.certDone = '1';
+
+        const link = item.querySelector('a[href]');
+        if (!link) return;
+
+        const url = link.getAttribute('href'); // customview.php (muestra el certificado)
+        item.appendChild(buildActions(url));
+
+        const img = link.querySelector('img');
+        if (img) renderThumb(url, img);
+    }
+
+    function init() {
+        const items = document.querySelectorAll('.block_mycertificates .certificateitem');
+        if (!items.length) { log('No hay certificados en esta página, omitiendo'); return; }
+        log(items.length + ' certificado(s) encontrados');
+        items.forEach(enhanceItem);
+    }
+
+    // Arranca en cuanto el DOM está listo (sin espera fija) + reintento de
+    // seguridad por si los certificados se renderizan algo más tarde (idempotente)
+    function boot() { init(); setTimeout(init, 600); }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+    } else {
+        boot();
+    }
+})();
+</script>
